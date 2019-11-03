@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+    --primary-color: #043353;
+    --accent-color: #E44652;
+    --primary-text: #1E1E1E;
+    --secondary-text: #FAF8F0;
+    --divider-color: #E4DFCF;
+    --light-background: #FAF8F0;
+    --dark-background: #043353;
+}
+
+html, body { height: 100%; }
+html { background: var(--light-background); }
+
+* { 
+    margin: 0; 
+    font-family: 'Roboto', sans-serif; 
+}
+h1, h2, h3, h4 {
+    font-family: 'Comfortaa', cursive;
+}
