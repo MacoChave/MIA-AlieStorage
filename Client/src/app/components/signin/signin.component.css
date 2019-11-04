@@ -1,0 +1,32 @@
+.grid-container {
+    margin: 5rem;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form__group {
+    margin: .5rem 0;
+}
+
+.item:nth-child(3) {
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+}
+
+.source {
+    max-width: 40vw;
+}
+
+@media screen and (max-width: 767px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+        margin: 2rem;
+    }
+}

@@ -1,0 +1,46 @@
+<button class="btn btn-stroked-primary toolbar__button" [routerLink]="['/signin']" mat-stroked-button>Log in</button>
+
+<mat-card class="card">
+    <mat-card-header class="card__header">
+    </mat-card-header>
+    <video width="100%" [(src)]=info.VIDEO class="card__source" controls [(title)]='info.NOMBRE'>
+        Sorry, your browser doesn't support HTML5 <code>video</code>, 
+        but your can download this video from the <a href="http://localhost:3000/api/info/video" target="_blank">Internet archive</a>.
+    </video>
+    <mat-card-content class="card__content">
+        <p>{{ info.ESLOGAN }}</p>
+    </mat-card-content>
+    <mat-card-actions class="card__actions">
+        <button class="btn btn-flat-primary" mat-flat-button>Get Started</button>
+    </mat-card-actions>
+</mat-card>
+
+<div class="grid_container">
+    <mat-card class="card">
+        <mat-card-header class="card__header">
+            <h1>Mision</h1>
+        </mat-card-header>
+        <img src="assets/img/mision.png" alt="Mision" class="card__source image">
+        <mat-card-content class="card__content">
+            <p>{{ info.MISION }}</p>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="card">
+        <mat-card-header class="card__header">
+            <h1>Visión</h1>
+        </mat-card-header>
+        <img src="assets/img/vision.png" alt="Visión" class="card__source image">
+        <mat-card-content class="card__content">
+            <p>{{ info.VISION }}</p>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<mat-card class="card">
+    <mat-card-header class="card__header">
+        <h1>About</h1>
+    </mat-card-header>
+    <mat-card-content class="card__content">
+        <p>{{ info.ABOUT }}</p>
+    </mat-card-content>
+</mat-card>

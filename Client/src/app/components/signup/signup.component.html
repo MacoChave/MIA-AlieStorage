@@ -1,0 +1,21 @@
+<div class="grid-container">
+    <div class="item">
+        <img class="source" src="assets/img/background.png" alt="Background">
+    </div>
+    <div class="item">
+        <h1>Crea tu cuenta</h1>
+        <form class="form">
+            <mat-form-field class="form__group">
+                <input matInput type="text" class="form__input" placeholder="Usuario">
+            </mat-form-field>
+            <mat-form-field class="form__group">
+                <input matInput type="password" class="form__input" placeholder="Password">
+            </mat-form-field>
+            <button mat-button class="btn btn-stroked-primary">Sign up</button>
+        </form>
+    </div>
+    <div class="item">
+        <p class="text">¿Aún no eres miembro?</p>
+        <button mat-button class="btn btn__basic__accent" [routerLink]="['/signin']">Sign in</button>
+    </div>
+</div>

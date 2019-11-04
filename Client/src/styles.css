@@ -20,3 +20,57 @@ html { background: var(--light-background); }
 h1, h2, h3, h4 {
     font-family: 'Comfortaa', cursive;
 }
+
+.btn {
+    border-radius: 30px !important;
+    padding: 0 2em !important;
+}
+
+.btn:hover {
+    opacity: .7;
+}
+
+.btn-stroked-primary {
+    border: 1px solid var(--primary-color) !important;
+    background: none !important;
+    color: var(--primary-color) !important;
+}
+
+.btn-flat-primary {
+    background: var(--primary-color) !important;
+    color: var(--secondary-text) !important;
+}
+
+.btn__basic__accent {
+    color: var(--accent-color) !important;
+}
+
+.toolbar {
+    background: var(--light-background);
+    color: var(--primary-text-color);
+    position: fixed;
+    z-index: 10;
+}
+
+.toolbar__icon {
+    height: 1em;
+}
+
+.toolbar__spacer {
+    flex: 1 1 auto;
+}
+
+.divider {
+    background: var(--divider-color);
+    height: 8vh;
+}
+
+.card {
+    max-width: 80vw;
+    margin: .5rem auto;
+}
+
+.card__content {
+    font-size: 2em;
+    text-align: center;
+}

@@ -1,2 +1,11 @@
+<mat-toolbar class="toolbar">
+    <mat-toolbar-row>
+        <img class="toolbar__icon" [(src)]='info.LOGO' alt="Alie-Storage_Logo">
+        <h1 class="toolbar__title">{{ info.NOMBRE }}</h1>
+        <span class="toolbar__spacer"></span>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="divider"> </div>
 
 <router-outlet></router-outlet>

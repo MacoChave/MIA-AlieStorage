@@ -1,0 +1,27 @@
+.toolbar__button {
+    z-index: 10;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+}
+
+.grid_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 83vw;
+    margin: 0 auto;
+}
+
+.image {
+    width: 20%;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 767px) {
+    h1 { font-size: 1em; }
+    p { font-size: .5em; }
+
+    .grid_container {
+        grid-template-columns: 1fr;
+    }
+}
