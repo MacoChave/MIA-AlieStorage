@@ -12,6 +12,8 @@ import { FrontpageComponent } from './components/frontpage/frontpage.component';
 import { MaterialModule } from './material/material.module';
 import { SigninComponent } from './components/signin/signin.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,10 @@ import { SignupComponent } from './components/signup/signup.component';
     AppRoutingModule,
     BrowserAnimationsModule, 
     MaterialModule, 
-    HttpClientModule
+    HttpClientModule, 
+    FormsModule, 
+    ReactiveFormsModule, 
+    MatNativeDateModule
   ],
   providers: [
     InfoService

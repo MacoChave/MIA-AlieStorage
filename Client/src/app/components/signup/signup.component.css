@@ -5,6 +5,10 @@
     grid-template-columns: 1fr 1fr;
 }
 
+.flex-container {
+    display: flex;
+}
+
 .form {
     display: flex;
     flex-direction: column;

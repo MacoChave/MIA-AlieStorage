@@ -4,13 +4,46 @@
     </div>
     <div class="item">
         <h1>Crea tu cuenta</h1>
-        <form class="form">
+        <form class="form" (ngSubmit)='signup()'>
+            <div class="flex-container">
+                <mat-form-field class="form__group">
+                    <input matInput class="form__input" type="text" placeholder="Nombre" name="input-firstname" id="input-firstname" [(ngModel)]='user.NOMBRE' required/>
+                </mat-form-field>
+                <mat-form-field class="form__group">
+                    <input matInput class="form__input" type="text" placeholder="Apellido" name="input-lastname" id="input-lastname" [(ngModel)]='user.APELLIDO' required/>
+                </mat-form-field>
+            </div>
             <mat-form-field class="form__group">
-                <input matInput type="text" class="form__input" placeholder="Usuario">
+              <input matInput class="form__input" type="text" placeholder="Usuario" name="input-user" id="input-user" [(ngModel)]='user.USERNAME' required/>
             </mat-form-field>
             <mat-form-field class="form__group">
-                <input matInput type="password" class="form__input" placeholder="Password">
+                <input matInput class="form__input" type="email" placeholder="Email" name="input-email" [(ngModel)]='user.EMAIL' required>
             </mat-form-field>
+            <mat-form-field class="form__group">
+              <input matInput class="form__input" type="password" placeholder="Contraseña" name="input-password" id="input-password" [(ngModel)]='user.PASS' required/>
+            </mat-form-field>
+            <mat-form-field class="form__group">
+              <input matInput class="form__input" type="tel" placeholder="Teléfono" name="input-phone" id="input-phone" [(ngModel)]='user.TELEFONO' required/>
+            </mat-form-field>
+            <mat-form-field class="form__group">
+                <textarea matInput class="form__input" placeholder="Dirección" name="input-address" id="input-address" [(ngModel)]='user.DIRECCION'></textarea>
+              </mat-form-field>
+            <mat-form-field class="form__group">
+                <input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" 
+                    (dateInput)="addDate($event)" (dateChange)="addDate($event)">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="form__group">
+                <mat-label>Género</mat-label>
+                <select matNativeControl required class="form__input" name="input-genre" [(ngModel)]='user.GENERO'>
+                    <option class="form__input" value="m">Masculino</option>
+                    <option class="form__input" value="f">Femenino</option>
+                </select>
+            </mat-form-field>
+            <div class="form__group">
+                <input class="form__input" type="file" (change)='change($event)' required>
+            </div>
             <button mat-button class="btn btn-stroked-primary">Sign up</button>
         </form>
     </div>

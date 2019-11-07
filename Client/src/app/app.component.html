@@ -1,6 +1,6 @@
 <mat-toolbar class="toolbar">
     <mat-toolbar-row>
-        <img class="toolbar__icon" [(src)]='info.LOGO' alt="Alie-Storage_Logo">
+        <img class="toolbar__icon" [(src)]='info.LOGO' alt="Alie-Storage_Logo" [routerLink]="['/']">
         <h1 class="toolbar__title">{{ info.NOMBRE }}</h1>
         <span class="toolbar__spacer"></span>
     </mat-toolbar-row>
@@ -9,3 +9,15 @@
 <div class="divider"> </div>
 
 <router-outlet></router-outlet>
+
+<footer class="footer">
+    <div class="grid-container">
+        <div class="item">
+            <p>Marco Antonio Fidencio Chávez Fuentes</p>
+            <p>2010 20831</p>
+        </div>
+        <div class="item">
+            <p><span>&reg;</span> Alie-Storage - Manejo e Implementación de Archivos 2019</p>
+        </div>
+    </div>
+</footer>

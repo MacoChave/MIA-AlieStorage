@@ -1,0 +1,14 @@
+.footer {
+    background: var(--dark-background);
+    color: var(--secondary-text);
+    padding: 5vh 2vw;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.item {
+    text-align: center;
+}

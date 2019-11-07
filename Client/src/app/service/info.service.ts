@@ -16,7 +16,14 @@ export class InfoService {
   getVideo() {
     return this.http.get(`${Uri.INFO}/video`);
   }
+
   getLogo() {
     return this.http.get(`${Uri.INFO}/logo`);
+  }
+
+  postVideo(file: File) {
+    const fd = new FormData();
+    fd.append('video', file, file.name);
+    return this.http.post(`${Uri.INFO}/video`, fd);
   }
 }

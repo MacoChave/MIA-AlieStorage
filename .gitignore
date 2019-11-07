@@ -124,7 +124,8 @@ public/
 # DynamoDB Local files
 .dynamodb/
 
-### Video ###
+### RECURSOS ###
 *.mp4
+*_profile.* 
 
 # End of https://www.gitignore.io/api/node,angular

@@ -32,8 +32,10 @@ CREATE TABLE Usuario (
     genero VARCHAR2(1),
     fecha_nacimiento TIMESTAMP,
     fecha_registro TIMESTAMP,
+    estado VARCHAR2(1)
     cod_tipo INT
 );
+-- N NUEVO C CONFIRMADO A ANULADO
 ALTER TABLE Usuario 
 ADD CONSTRAINT PK_USUARIO PRIMARY KEY (cod_usuario);
 ALTER TABLE Usuario 
