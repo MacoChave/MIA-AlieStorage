@@ -14,13 +14,15 @@ import { SigninComponent } from './components/signin/signin.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ValidateuserComponent } from './components/validateuser/validateuser.component';
+import { NotfoundComponent } from './components/notfound/notfound.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FrontpageComponent,
     SignupComponent, 
-    SigninComponent
+    SigninComponent, ValidateuserComponent, NotfoundComponent
   ],
   imports: [
     BrowserModule,
