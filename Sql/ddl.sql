@@ -28,20 +28,27 @@ CREATE TABLE Usuario (
     pass VARCHAR2(15),
     email VARCHAR2(30),
     telefono INT,
+    direccion VARCHAR2(200), 
     fotografia VARCHAR2(200),
     genero VARCHAR2(1),
     fecha_nacimiento TIMESTAMP,
-    fecha_registro TIMESTAMP,
-    estado VARCHAR2(1)
+    fecha_registro TIMESTAMP, 
+    fecha_validacion TIMESTAMP, 
+    estado VARCHAR2(1), 
     cod_tipo INT
 );
+
 -- N NUEVO C CONFIRMADO A ANULADO
 ALTER TABLE Usuario 
 ADD CONSTRAINT PK_USUARIO PRIMARY KEY (cod_usuario);
 ALTER TABLE Usuario 
 ADD CONSTRAINT FK_USUARIO_TIPO FOREIGN KEY (cod_tipo) REFERENCES Tipo(cod_tipo);
 ALTER TABLE Usuario 
-MODIFY fecha_registro DEFAULT CURRENT_TIMESTAMP;
+MODIFY (
+    fecha_registro DEFAULT CURRENT_TIMESTAMP, 
+    fecha_validacion DEFAULT CURRENT_TIMESTAMP, 
+    estado DEFAULT 'n'
+);
 
 CREATE SEQUENCE SEQ_USUARIO;
 CREATE TRIGGER TRG_PKUSUARIO 
@@ -66,6 +73,8 @@ ALTER TABLE Chat
 ADD CONSTRAINT PK_CHAT PRIMARY KEY (cod_chat);
 ALTER TABLE Chat 
 ADD CONSTRAINT FK_CHAT_USUARIO FOREIGN KEY (cod_cliente) REFERENCES Usuario(cod_usuario);
+ALTER TABLE Chat 
+MODIFY fecha DEFAULT CURRENT_TIMESTAMP;
 
 CREATE SEQUENCE SEQ_CHAT;
 CREATE TRIGGER TRG_PKCHAT
@@ -86,9 +95,9 @@ CREATE TABLE DetalleChat (
 ALTER TABLE DetalleChat 
 ADD CONSTRAINT PK_DETALLECHAT PRIMARY KEY (cod_chat, cod_root);
 ALTER TABLE DetalleChat 
-ADD CONSTRAINT FK_CHATUSUARIO FOREIGN KEY (cod_root) REFERENCES Usuario(cod_usuario);
-ALTER TABLE DetalleChat 
 ADD CONSTRAINT FK_DETALLECHATUSUARIO FOREIGN KEY (cod_chat) REFERENCES Chat(cod_chat);
+ALTER TABLE DetalleChat 
+ADD CONSTRAINT FK_CHATUSUARIO FOREIGN KEY (cod_root) REFERENCES Usuario(cod_usuario);
 
 /* *****************************************************
  * FILESYSTEM
@@ -125,11 +134,11 @@ CREATE TABLE Particion (
     nombre VARCHAR2(30), 
     size_particion INT, 
     unit VARCHAR2(1) 
-)
+);
 ALTER TABLE Particion 
 ADD CONSTRAINT PK_PARTICION PRIMARY KEY (cod_particion);
 ALTER TABLE Particion 
-ADD CONSTRAINT FK_PARTITIONDISCO FOREIGN KEY (cod_disco) REFERENCES DiscoVirtual(cod_disco);
+ADD CONSTRAINT FK_PARTICIONDISCO FOREIGN KEY (cod_disco) REFERENCES DiscoVirtual(cod_disco);
 ALTER TABLE Particion 
 MODIFY (
     size_particion DEFAULT 10, 
@@ -137,7 +146,7 @@ MODIFY (
 );
 
 CREATE SEQUENCE SEQ_PARTICION;
-CREATE TRIGGER TRG_PKTIPO 
+CREATE TRIGGER TRG_PKPARTICION 
     BEFORE INSERT ON Particion
     FOR EACH ROW 
 BEGIN 
@@ -152,12 +161,13 @@ CREATE TABLE Carpeta (
     cod_particion INT, 
     cod_padre INT, 
     nombre VARCHAR2(15), 
-    permiso INT 
+    permiso INT, 
+    no_bloque INT 
 );
 ALTER TABLE Carpeta 
-ADD CONSTRAINT PK_CARPETA PRIMARY KEY (cod_particion, cod_carpeta);
+ADD CONSTRAINT PK_CARPETA PRIMARY KEY (cod_carpeta);
 ALTER TABLE Carpeta 
-ADD CONSTRAINT FK_PARTICIONCARPETA FOREIGN KEY (cod_particion) REFERENCES Particion(cod_particion);
+ADD CONSTRAINT FK_CARPETAPARTICION FOREIGN KEY (cod_particion) REFERENCES Particion(cod_particion);
 ALTER TABLE Carpeta 
 ADD CONSTRAINT FK_CARPETAPADRE FOREIGN KEY (cod_padre) REFERENCES Carpeta(cod_carpeta)
                 ON DELETE CASCADE;
@@ -178,12 +188,13 @@ CREATE TABLE Archivo (
     cod_carpeta INT, 
     nombre VARCHAR2(15), 
     contenido VARCHAR2(800), 
-    permios INT 
+    permios INT, 
+    no_bloque INT 
 );
 ALTER TABLE Archivo 
 ADD CONSTRAINT PK_ARCHIVO PRIMARY KEY (cod_archivo);
 ALTER TABLE Archivo 
-ADD CONSTRAINT FK_ARCHIVOCARPETA FOREIGN KEY (cod_carpeta) REFERENCES Archivo(cod_archivo)
+ADD CONSTRAINT FK_ARCHIVOCARPETA FOREIGN KEY (cod_carpeta) REFERENCES Carpeta(cod_carpeta)
                 ON DELETE CASCADE;
 
 CREATE SEQUENCE SEQ_ARCHIVO;

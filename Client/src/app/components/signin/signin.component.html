@@ -2,18 +2,12 @@
     <div class="item">
         <h1>Ingresa a tu cuenta</h1>
         <form class="form">
-            <div class="form__container">
-              <input class="form__input" type="text" placeholder=" " id="input-name" pattern="[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{10,40}" maxlength="40"/>
-              <label class="form__label" form="input-name">Nombre</label>
-              <div class="form__focus-animation"></div>
-              <p class="form__error">Nombre no válido</p>
-            </div>
-            <div class="form__container">
-              <input class="form__input" type="password" placeholder=" " id="input-password" pattern="[a-zA-Z0-9._ -]{6,18}" maxlength="18"/>
-              <label class="form__label" form="input-password">Contraseña</label>
-              <div class="form__focus-animation"></div>
-              <p class="form__error">Contraseña no válido</p>
-            </div>
+            <mat-form-field class="form__group">
+                <input matInput class="form__input" type="text" placeholder="Usuario" name="input-user" id="input-user" [(ngModel)]='user.USERNAME' required/>
+              </mat-form-field>
+              <mat-form-field class="form__group">
+                  <input matInput class="form__input" type="pass" placeholder="Password" name="input-pass" [(ngModel)]='user.PASS' required>
+              </mat-form-field>
             <button mat-button class="btn btn-stroked-primary">Sign in</button>
         </form>
     </div>

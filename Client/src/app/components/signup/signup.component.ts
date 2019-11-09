@@ -1,16 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormBuilder } from '@angular/forms';
 import { UserService } from 'src/app/service/user.service';
 import { User } from 'src/app/modules/User';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl, form: FormGroupDirective | NgForm): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
 
 @Component({
   selector: 'app-signup',
@@ -19,6 +12,8 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class SignupComponent implements OnInit {
 
+  @HostBinding('class') cases = 'signup';
+  
   image: File;
   user: User = {
     COD_USUARIO: 0,

@@ -31,21 +31,27 @@ END;
 -- ACTUALIZAR CONTRASEÑA
 CREATE OR REPLACE PROCEDURE SP_UPDATEPASS (
     in_username IN VARCHAR2, 
-    in_pass IN VARCHAR2
+    in_pass IN VARCHAR2, 
+    in_genpass IN VARCHAR2
 ) IS 
     creacion TIMESTAMP;
     actual TIMESTAMP;
+    counting NUMBER;
     i NUMBER;
 BEGIN 
-    SELECT FECHA_REGISTRO 
+    SELECT FECHA_VALIDACION 
     INTO creacion 
     FROM USUARIO 
     WHERE USERNAME = in_username;
     
     SELECT SYSTIMESTAMP INTO actual 
     FROM DUAL;
+
+    SELECT COUNT(USERNAME) INTO counting 
+    FROM USERNAME 
+    WHERE PASS LIKE in_genpass;
     
-    IF (EXTRACT(MINUTE FROM actual) - EXTRACT(MINUTE FROM creacion) < 1) THEN 
+    IF ((EXTRACT(MINUTE FROM actual) - EXTRACT(MINUTE FROM creacion) < 1) && counting > 0) THEN 
         UPDATE USUARIO 
         SET 
             pass = in_pass, 

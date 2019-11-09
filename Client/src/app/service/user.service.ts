@@ -9,7 +9,15 @@ import { User } from '../modules/User';
 export class UserService {
 
   constructor(private http: HttpClient) { }
-
+  
+  getAll() {
+    return this.http.get(`${Uri.USUARIO}`);
+  }
+  
+  getOne(id: string) {
+    return this.http.get(`${Uri.USUARIO}/${id}`);
+  }
+  
   postProfile(file: File, filename: string) {
     const formData = new FormData();
     formData.append('image', file);
@@ -19,7 +27,28 @@ export class UserService {
     );
   }
 
-  createUser(user: User) {
+  create(user: User) {
     return this.http.post(`${Uri.USUARIO}/`, user);
+  }
+
+  validate(user: User, pass: string) {
+    const data = {
+      USERNAME: user.USERNAME, 
+      PASS: user.PASS, 
+      GENPASS: pass
+    }
+    return this.http.post(`${Uri.USUARIO}/validate`, data);
+  }
+
+  check(user: User) {
+    return this.http.post(`${Uri.USUARIO}/check`, user);
+  }
+
+  update(user: User) {
+    return this.http.put(`${Uri.USUARIO}/`, user);
+  }
+
+  changeRole(user: User) {
+    return this.http.put(`${Uri.USUARIO}/role`, user);
   }
 }

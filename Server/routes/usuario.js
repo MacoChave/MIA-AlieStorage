@@ -20,25 +20,57 @@ let storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.get('/', (req, res) => {
-    const data = {
-        "module": "Usuario",
-        "author": "2010 20831"
-    };
-    res.json(data);
+    executor.query(
+        `SELECT 
+            NOMBRE, APELLIDO, USERNAME, PASS, EMAIL, TELEFONO, DIRECCION, FOTOGRAFIA, GENERO, 
+            FECHA_NACIMIENTO, FECHA_REGISTRO, FECHA_VALIDACION, ESTADO, DESCRIPCION AS TIPO 
+        FROM 
+            Usuario U, Tipo T
+        WHERE 
+            U.COD_TIPO = T.COD_TIPO`, 
+        []
+    )
+    .then(result => {
+        res.json(result.rows);
+    })
 });
+
+router.get('/:id', (req, res) => {
+    const { username } = req.params;
+
+    executor.query(
+        `SELECT 
+            COD_USUARIO, NOMBRE, APELLIDO, USERNAME, PASS, EMAIL, TELEFONO, DIRECCION, FOTOGRAFIA, GENERO, 
+            FECHA_NACIMIENTO, FECHA_REGISTRO, FECHA_VALIDACION, ESTADO, DESCRIPCION AS TIPO 
+        FROM 
+            Usuario U, Tipo T
+        WHERE 
+            U.COD_TIPO = T.COD_TIPO AND 
+            COD_USUARIO = :id;`, 
+        [username]
+    )
+    .then(result => {
+        res.json(result.rows);
+    })
+})
 
 router.post('/profile/:filename', upload.single('image'), (req, res) => {
     const file = req.params.filename;
     
-    res.json({message: 'Profile image uploaded', image: file});
+    res.json({ 
+        message: 'Profile image was uploaded sucessfully', 
+        image: file 
+    });
 })
 
 router.post('/', (req, res) => {
     const { NOMBRE, APELLIDO, USERNAME, PASS, EMAIL, TELEFONO, FOTOGRAFIA, GENERO, FECHA_NACIMIENTO, DIRECCION, TIPO } = req.body;
+    PASS = pwd.customPassword();
     executor.sp(
         `BEGIN 
             SP_NEWUSER(
-                :nombre, :apellido, :username, :pass, :email, :telefono, :fotografia, :genero, :nacimiento, :direccion, :tipo
+                :nombre, :apellido, :username, :pass, :email, :telefono, 
+                :fotografia, :genero, :nacimiento, :direccion, :tipo
             );
         END`,
         {
@@ -56,7 +88,94 @@ router.post('/', (req, res) => {
         }
     )
     .then(result => {
-        res.json({ message: 'inserted'});
+        res.json({ 
+            message: 'User was inserted successfully', 
+            rows_affected: result
+        });
+    })
+})
+
+router.post('/validate', (req, res) => {
+    // TODO: MODIFICAR PROCEDIMIENTO ALMACENADO, PARA VALIDAR PASSWORD GENERADO
+    const { USERNAME, PASS, GENPASS } = req.body;
+    executor.sp(
+        `BEGIN 
+            SP_UPDATEPASS(:username, :pass, :genpass);
+        END`, 
+        {
+            username: USERNAME, 
+            pass: PASS, 
+            genpass: GENPASS
+        }
+    )
+    .then(result => {
+        res.json({
+            message: 'Validate complete', 
+            rows_affected: result
+        });
+    })
+})
+
+router.post('/check', (req, res) => {
+    const { USERNAME, PASS } = req.body;
+
+    executor.query(
+        `SELECT * FROM USUARIO 
+        WHERE 
+            USERNAME LIKE :username AND 
+            PASS LIKE :pass`, 
+        [USERNAME, PASS]
+    )
+    .then(result => {
+        res.json(result.rows);
+    })
+})
+
+router.put('/', (req, res) => {
+    const { COD_USUARIO, NOMBRE, APELLIDO, PASS, TELEFONO, DIRECCION } = req.body;
+
+    executor.sp(
+        `BEGIN
+            SP_UPDATEUSER(
+                :cod_usuario, :nombre, :apellido :pass, :telefono, :direccion
+            );
+        END`, 
+        {
+            cod_usuario: COD_USUARIO, 
+            nombre: NOMBRE, 
+            apellido: APELLIDO, 
+            pass: PASS, 
+            telefono: TELEFONO, 
+            direccion: DIRECCION
+        }
+    )
+    .then(result => {
+        res.json({
+            message: 'Transaction was complete', 
+            rows_affected: result
+        })
+    })
+})
+
+router.put('/role', (req, res) => {
+    const { COD_USUARIO, TIPO } = req.body;
+
+    executor.sp(
+        `BEGIN
+            SP_UPDATEROL(
+                :codigo, :tipo
+            );
+        END`, 
+        {
+            codigo: COD_USUARIO, 
+            tipo: TIPO
+        }
+    )
+    .then(result => {
+        res.json({
+            message: 'Transaction was complete', 
+            rows_affected: result
+        })
     })
 })
 

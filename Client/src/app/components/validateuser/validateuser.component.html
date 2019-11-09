@@ -1,0 +1,20 @@
+<div class="grid-container">
+    <div class="item">
+        <img class="source" src="assets/img/background.png" alt="Background">
+    </div>
+    <div class="item">
+        <h1>Valida tu cuenta</h1>
+        <form class="form">
+            <mat-form-field class="form__group">
+                <input matInput class="form__input" type="text" placeholder="Usuario" name="input-user" id="input-user" [(ngModel)]='user.USERNAME' required/>
+            </mat-form-field>
+            <mat-form-field class="form__group">
+                <input matInput class="form__input" type="pass" placeholder="Password generado" name="input-passgen" [(ngModel)]='GENPASS' required>
+            </mat-form-field>
+            <mat-form-field class="form__group">
+                <input matInput class="form__input" type="pass" placeholder="Nuevo password" name="input-newpass" [(ngModel)]='user.PASS' required>
+            </mat-form-field>
+            <button mat-button class="btn btn-stroked-primary">Confirmar</button>
+        </form>
+    </div>
+</div>

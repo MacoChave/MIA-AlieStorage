@@ -1,16 +1,14 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/modules/User';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
-  selector: 'app-signin',
-  templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.css']
+  selector: 'app-validateuser',
+  templateUrl: './validateuser.component.html',
+  styleUrls: ['./validateuser.component.css']
 })
-export class SigninComponent implements OnInit {
+export class ValidateuserComponent implements OnInit {
 
-  @HostBinding('class') clases = 'signin';
-  
   user: User = {
     COD_USUARIO: 0,
     NOMBRE: '', 
@@ -26,6 +24,8 @@ export class SigninComponent implements OnInit {
     COD_TIPO: 0, 
     TIPO: 'Cliente'
   }
+
+  GENPASS: string;
   result: any;
 
   constructor(private userService: UserService) { }
@@ -33,8 +33,8 @@ export class SigninComponent implements OnInit {
   ngOnInit() {
   }
 
-  signin() {
-    this.userService.verificarUser(this.user).subscribe(
+  validate() {
+    this.userService.validateUser({ user: this.user, pass: this.GENPASS }).subscribe(
       res => this.result = res[0], 
       err => console.error(err)
     )
