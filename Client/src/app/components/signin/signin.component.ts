@@ -35,7 +35,7 @@ export class SigninComponent implements OnInit {
 
   signin() {
     this.userService.check(this.user).subscribe(
-      res => this.result = res[0], 
+      res => this.result = res, 
       err => console.error(err)
     )
   }
