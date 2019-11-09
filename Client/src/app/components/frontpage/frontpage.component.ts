@@ -33,7 +33,7 @@ export class FrontpageComponent implements OnInit {
   }
 
   loadInfo () {
-    this.infoService.getAllInfo().subscribe(
+    this.infoService.get().subscribe(
       res => {
         this.info = res[0];
         this.info.LOGO = `${Uri.INFO}/logo`;

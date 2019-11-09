@@ -34,7 +34,7 @@ export class SigninComponent implements OnInit {
   }
 
   signin() {
-    this.userService.verificarUser(this.user).subscribe(
+    this.userService.check(this.user).subscribe(
       res => this.result = res[0], 
       err => console.error(err)
     )

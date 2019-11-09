@@ -57,7 +57,7 @@ export class SignupComponent implements OnInit {
     this.user.FOTOGRAFIA = this.user.USERNAME.replace(/ /g, '-');
     this.user.FOTOGRAFIA += '_profile';
     this.upload();
-    this.userService.createUser(this.user).subscribe(
+    this.userService.create(this.user).subscribe(
       res => console.log(res)
     )
   }

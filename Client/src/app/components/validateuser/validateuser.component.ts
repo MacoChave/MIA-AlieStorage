@@ -34,7 +34,7 @@ export class ValidateuserComponent implements OnInit {
   }
 
   validate() {
-    this.userService.validateUser({ user: this.user, pass: this.GENPASS }).subscribe(
+    this.userService.validate(this.user, this.GENPASS).subscribe(
       res => this.result = res[0], 
       err => console.error(err)
     )
