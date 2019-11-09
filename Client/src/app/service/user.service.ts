@@ -40,6 +40,10 @@ export class UserService {
     return this.http.post(`${Uri.USUARIO}/validate`, data);
   }
 
+  reloadpass(user: User) {
+    return this.http.post(`${Uri.USUARIO}/reloadpass`, user);
+  }
+
   check(user: User) {
     return this.http.post(`${Uri.USUARIO}/check`, user);
   }

@@ -116,6 +116,24 @@ router.post('/validate', (req, res) => {
     })
 })
 
+router.put('/reloadpass', (req, res) => {
+    const { USERNAME, PASS } = req.body;
+    PASS = pwd.customPassword();
+    executor.query(
+        `UPDATE USUARIO 
+        SET 
+            PASS = :pass AND 
+            FECHA_VALIDACION = CURRENT_TIMESTAMP 
+        WHERE 
+            USERNAME = :username`, 
+        { USERNAME, PASS }
+    )
+    .then(result => res.json({
+        message: 'Password was reloaded successfully', 
+        rows_affected: result.rowsAffected
+    }));
+})
+
 router.post('/check', (req, res) => {
     const { USERNAME, PASS } = req.body;
 

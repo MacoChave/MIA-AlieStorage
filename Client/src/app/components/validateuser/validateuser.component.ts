@@ -26,7 +26,6 @@ export class ValidateuserComponent implements OnInit {
   }
 
   GENPASS: string;
-  result: any;
 
   constructor(private userService: UserService) { }
 
@@ -35,7 +34,15 @@ export class ValidateuserComponent implements OnInit {
 
   validate() {
     this.userService.validate(this.user, this.GENPASS).subscribe(
-      res => this.result = res, 
+      res => {
+        console.log(res);
+        if (res.rows_affected > 0) console.info('Se ha verificado la cuenta')
+        else if (res.rows_affected < 0) console.error('Verificar el dato ingresado')
+        else {
+          this.userService.reloadpass(this.user)
+          console.info('Contraseña temporal reenviada');
+        }
+      }, 
       err => console.error(err)
     )
   }

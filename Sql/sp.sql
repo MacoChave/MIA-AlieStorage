@@ -48,19 +48,23 @@ BEGIN
     FROM DUAL;
 
     SELECT COUNT(USERNAME) INTO counting 
-    FROM USERNAME 
+    FROM USUARIO 
     WHERE PASS LIKE in_genpass;
     
-    IF ((EXTRACT(MINUTE FROM actual) - EXTRACT(MINUTE FROM creacion) < 1) && counting > 0) THEN 
-        UPDATE USUARIO 
-        SET 
-            pass = in_pass, 
-            estado = 'C'
-        WHERE username = in_username;
-        i := SQL%ROWCOUNT;
-        
-        COMMIT;
-        dbms_output.put_line(i);
+    IF (EXTRACT(MINUTE FROM actual) - EXTRACT(MINUTE FROM creacion) < 1) THEN 
+        IF (counting > 0) THEN 
+            UPDATE USUARIO 
+            SET 
+                pass = in_pass, 
+                estado = 'C'
+            WHERE username = in_username;
+            i := SQL%ROWCOUNT;
+            
+            COMMIT;
+            dbms_output.put_line(i);
+        ELSE
+            dbms_output.put_line(-1);
+        END IF;
     ELSE 
         UPDATE USUARIO 
         SET 
@@ -68,6 +72,9 @@ BEGIN
         WHERE username = in_username;
         dbms_output.put_line(0);
     END IF;
+EXCEPTION 
+    WHEN NO_DATA_FOUND THEN
+          DBMS_OUTPUT.PUT_LINE (-1);
 END;
 
 -- MODIFICAR USUARIO 
