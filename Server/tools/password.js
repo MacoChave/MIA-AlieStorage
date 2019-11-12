@@ -30,8 +30,8 @@ function isStrongEnough(password) {
 }
 
 function customPassword() {
-    var password = "";
     var randomLength = Math.floor(Math.random() * (maxLength - minLength)) + minLength;
+    var password = '';
     while (!isStrongEnough(password)) {
         password = genPass(randomLength, false, /[\w\d\?\-]/);
     }
@@ -50,4 +50,15 @@ schema
     .has().symbols()
     .has().not().spaces();
 
-// schema.validate('P@ssw0rd');
+// function validatePassword(password) {
+//     schema.validate(password);
+// }
+
+module.exports = {
+    passwordGenerator: () => {
+        return customPassword();
+    }, 
+    paswordValidator: (password) => {
+        return schema.validate(password);
+    }
+}

@@ -40,8 +40,14 @@ export class UserService {
     return this.http.post(`${Uri.USUARIO}/validate`, data);
   }
 
-  reloadpass(user: User) {
-    return this.http.post(`${Uri.USUARIO}/reloadpass`, user);
+  reloadpass(user: User, pass: string) {
+    const data = {
+      USERNAME: user.USERNAME, 
+      PASS: user.PASS, 
+      GENPASS: pass, 
+      EMAIL: user.EMAIL
+    }
+    return this.http.put(`${Uri.USUARIO}/reloadpass`, user);
   }
 
   check(user: User) {

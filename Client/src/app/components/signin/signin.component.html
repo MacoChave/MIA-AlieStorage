@@ -1,7 +1,7 @@
 <div class="grid-container">
     <div class="item">
         <h1>Ingresa a tu cuenta</h1>
-        <form class="form">
+        <form class="form" (ngSubmit)='signin()'>
             <mat-form-field class="form__group">
                 <input matInput class="form__input" type="text" placeholder="Usuario" name="input-user" id="input-user" [(ngModel)]='user.USERNAME' required/>
               </mat-form-field>

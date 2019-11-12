@@ -55,7 +55,7 @@ module.exports = {
                 query,
                 bindParam,
                 {
-                    outFormat: oracledb.OUT_FORMAT_OBJECT,
+                    outFormat: oracledb.OUT_OBJECT,
                     autoCommit: true
                 }
             );

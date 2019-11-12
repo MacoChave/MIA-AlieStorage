@@ -4,9 +4,12 @@ const path = require('path');
 const multer = require('multer');
 const executor = require('../db/exec');
 const fs = require('fs');
-const pwd = require('../tools/password');
+
+const password = require('../tools/password');
+const nodemail = require('../tools/send');
 
 const router = new Router();
+const email = new nodemail();
 
 let storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -58,19 +61,34 @@ router.post('/profile/:filename', upload.single('image'), (req, res) => {
     const file = req.params.filename;
     
     res.json({ 
-        message: 'Profile image was uploaded sucessfully', 
-        image: file 
+        MESSAGE: 'Profile image was uploaded sucessfully', 
+        RESULT: file 
     });
 })
 
 router.post('/', (req, res) => {
-    const { NOMBRE, APELLIDO, USERNAME, PASS, EMAIL, TELEFONO, FOTOGRAFIA, GENERO, FECHA_NACIMIENTO, DIRECCION, TIPO } = req.body;
-    PASS = pwd.customPassword();
+    const { NOMBRE, APELLIDO, USERNAME, EMAIL, TELEFONO, FOTOGRAFIA, GENERO, FECHA_NACIMIENTO, DIRECCION, TIPO } = req.body;
+    const PASS = password.passwordGenerator();
+    const mailOptions = {
+        from: 'noreply@aliestorage.com', 
+        to: EMAIL, 
+        subject: 'Validar tu cuenta', 
+        html: `<h1>Alie-Storage</h1>
+                <h2>Verificar correo electrónico</h2>
+                <p>El correo electrónico proporcionado <i>${EMAIL}</i> es válido</p>
+                <h2>Configura tu contraseña</h2>
+                <p>Para configurar tu contraseña, entra <a href="http://localhost:4200/validateme">aquí</a></p>
+                <p>Tus credenciales provisionales son: </p>
+                <ul>
+                    <li><b>Username: </b>${USERNAME}</li>
+                    <li><b>Contraseña: </b>${PASS}</li>
+                    </ul>`
+                }
     executor.sp(
         `BEGIN 
             SP_NEWUSER(
                 :nombre, :apellido, :username, :pass, :email, :telefono, 
-                :fotografia, :genero, :nacimiento, :direccion, :tipo
+                :fotografia, :genero, :nacimiento, :direccion, :tipo, :out_result
             );
         END`,
         {
@@ -84,54 +102,89 @@ router.post('/', (req, res) => {
             genero: GENERO, 
             nacimiento: FECHA_NACIMIENTO, 
             direccion: DIRECCION, 
-            tipo: TIPO
+            tipo: TIPO, 
+            out_result: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
         }
     )
     .then(result => {
+        email.sendMail(mailOptions)
+        console.log(result.outBinds.OUT_RESULT);
         res.json({ 
-            message: 'User was inserted successfully', 
-            rows_affected: result
+            MESSAGE: 'User was inserted successfully', 
+            ROWS_AFFECTED: result.outBinds.OUT_RESULT
         });
     })
 })
 
 router.post('/validate', (req, res) => {
-    // TODO: MODIFICAR PROCEDIMIENTO ALMACENADO, PARA VALIDAR PASSWORD GENERADO
     const { USERNAME, PASS, GENPASS } = req.body;
-    executor.sp(
-        `BEGIN 
-            SP_UPDATEPASS(:username, :pass, :genpass);
-        END`, 
-        {
-            username: USERNAME, 
-            pass: PASS, 
-            genpass: GENPASS
-        }
-    )
-    .then(result => {
+    CORRECT = password.paswordValidator(PASS);
+    console.log(req.body)
+    console.log(CORRECT)
+    if (CORRECT) {
+        executor.sp(
+            `SET SERVEROUTPUT ON; 
+            BEGIN 
+                SP_SETTINGPASS(:username, :pass, :genpass, :out_result);
+            END`, 
+            {
+                username: USERNAME, 
+                pass: PASS, 
+                genpass: GENPASS, 
+                out_result: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+            }
+        )
+        .then(result => {
+            console.log(result);
+            res.json({
+                MESSAGE: 'Validate complete', 
+                ROWS_AFFECTED: result.outBinds.out_result
+            });
+        })
+    } else {
         res.json({
-            message: 'Validate complete', 
-            rows_affected: result
-        });
-    })
+            MESSAGE: 'Wrong password', 
+            ROWS_AFFECTED: -3
+        })
+    }
 })
 
 router.put('/reloadpass', (req, res) => {
-    const { USERNAME, PASS } = req.body;
-    PASS = pwd.customPassword();
+    const { USERNAME, EMAIL, GENPASS } = req.body;
+    console.log(req.body)
+    const PASS = password.passwordGenerator();
+    const mailOptions = {
+        from: 'noreply@aliestorage.com', 
+        to: EMAIL, 
+        subject: 'Validar tu cuenta', 
+        html: `<h1>Alie-Storage</h1>
+                <h2>Verificar correo electrónico</h2>
+                <p>El correo electrónico proporcionado <i>${EMAIL}</i> es válido</p>
+                <h2>Configura tu contraseña</h2>
+                <p>Para configurar tu contraseña, entra <a href="http://localhost:4200/validateme">aquí</a></p>
+                <p>Tus credenciales provisionales son: </p>
+                <ul>
+                    <li><b>Username: </b>${USERNAME}</li>
+                    <li><b>Contraseña: </b>${PASS}</li>
+                    </ul>`
+                }
     executor.query(
         `UPDATE USUARIO 
         SET 
-            PASS = :pass AND 
+            PASS = :pass,  
             FECHA_VALIDACION = CURRENT_TIMESTAMP 
         WHERE 
-            USERNAME = :username`, 
-        { USERNAME, PASS }
+            USERNAME = :username AND 
+            PASS = :genpass`, 
+        { PASS, USERNAME, GENPASS }
     )
-    .then(result => res.json({
-        message: 'Password was reloaded successfully', 
-        rows_affected: result.rowsAffected
-    }));
+    .then(result => {
+        email.sendMail(mailOptions)
+        res.json({
+            MESSAGE: 'Password was reloaded successfully', 
+            ROWS_AFFECTED: result.rowsAffected
+        })
+    });
 })
 
 router.post('/check', (req, res) => {
@@ -155,7 +208,7 @@ router.put('/', (req, res) => {
     executor.sp(
         `BEGIN
             SP_UPDATEUSER(
-                :cod_usuario, :nombre, :apellido :pass, :telefono, :direccion
+                :cod_usuario, :nombre, :apellido :pass, :telefono, :direccion, :out_result
             );
         END`, 
         {
@@ -164,13 +217,15 @@ router.put('/', (req, res) => {
             apellido: APELLIDO, 
             pass: PASS, 
             telefono: TELEFONO, 
-            direccion: DIRECCION
+            direccion: DIRECCION, 
+            out_result: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
         }
     )
     .then(result => {
+        console.log(result.outBinds.OUT_RESULT)
         res.json({
-            message: 'Transaction was complete', 
-            rows_affected: result
+            MESSAGE: 'Transaction was complete', 
+            ROWS_AFFECTED: result.outBinds.OUT_RESULT
         })
     })
 })
@@ -179,20 +234,22 @@ router.put('/role', (req, res) => {
     const { COD_USUARIO, TIPO } = req.body;
 
     executor.sp(
-        `BEGIN
+        `SET SERVEROUTPUT ON;
+        BEGIN
             SP_UPDATEROL(
-                :codigo, :tipo
+                :codigo, :tipo, :out_result
             );
         END`, 
         {
             codigo: COD_USUARIO, 
-            tipo: TIPO
+            tipo: TIPO, 
+            out_result: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
         }
     )
     .then(result => {
         res.json({
-            message: 'Transaction was complete', 
-            rows_affected: result
+            MESSAGE: 'Transaction was complete', 
+            ROWS_AFFECTED: result.outBinds.OUT_RESULT
         })
     })
 })

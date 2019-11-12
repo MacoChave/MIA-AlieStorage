@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/modules/User';
 import { UserService } from 'src/app/service/user.service';
+import { Result } from 'src/app/modules/Result';
 
 @Component({
   selector: 'app-validateuser',
@@ -26,6 +27,7 @@ export class ValidateuserComponent implements OnInit {
   }
 
   GENPASS: string;
+  result: Result;
 
   constructor(private userService: UserService) { }
 
@@ -35,12 +37,18 @@ export class ValidateuserComponent implements OnInit {
   validate() {
     this.userService.validate(this.user, this.GENPASS).subscribe(
       res => {
-        console.log(res);
-        if (res.rows_affected > 0) console.info('Se ha verificado la cuenta')
-        else if (res.rows_affected < 0) console.error('Verificar el dato ingresado')
+        this.result = res;
+        console.log(this.result);
+        if (this.result.ROWS_AFFECTED > 0) console.info('Se ha verificado la cuenta')
+        else if (this.result.ROWS_AFFECTED < 0) console.error('Verificar el dato ingresado')
         else {
-          this.userService.reloadpass(this.user)
-          console.info('Contraseña temporal reenviada');
+          this.userService.reloadpass(this.user, this.GENPASS).subscribe(
+            res => {
+              console.log(res);
+              console.info('Contraseña temporal reenviada');
+            }, 
+            err => console.error(err)
+          )
         }
       }, 
       err => console.error(err)
