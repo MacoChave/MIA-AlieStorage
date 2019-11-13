@@ -1,10 +1,27 @@
 <mat-sidenav-container class="drawer">
     <mat-sidenav class="drawer__side" mode='side' [(opened)]='opened'>
-
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+            <!-- This is the tree node template for leaf nodes -->
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+                <!-- use a disabled button to provide padding for tree leaf -->
+                <button mat-icon-button disabled></button>
+                {{node.name}}
+            </mat-tree-node>
+            <!-- This is the tree node template for expandable nodes -->
+            <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+                <button mat-icon-button matTreeNodeToggle
+                        [attr.aria-label]="'toggle ' + node.name">
+                <mat-icon class="mat-icon-rtl-mirror">
+                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                </mat-icon>
+                </button>
+                {{node.name}}
+            </mat-tree-node>
+        </mat-tree>
     </mat-sidenav>
 
     <mat-sidenav-content class="drawer__content">
-        <button class="favbtn btn-flat-primary" mat-flat-button (click)='toggle_menu()'>
+        <button class="favbtn btn-basic-primary" mat-flat-button (click)='toggle_menu()'>
             <mat-icon>{{ toggle_button }}</mat-icon>
         </button>
         <p>Contenido de carpeta actual</p>

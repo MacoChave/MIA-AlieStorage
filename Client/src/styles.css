@@ -52,8 +52,10 @@ h1, h2, h3, h4 {
 
 .favbtn {
     border-radius: 50% !important;
-    width: 3rem;
-    height: 3rem;
+    margin: 0;
+    padding: 0;
+    width: 2.5rem;
+    height: 2.5rem;
 }
 
 .btn:hover {
