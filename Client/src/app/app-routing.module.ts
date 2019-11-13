@@ -5,6 +5,8 @@ import { SigninComponent } from './components/signin/signin.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ValidateuserComponent } from './components/validateuser/validateuser.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
+import { UserComponent } from './components/user-dashboard/user/user.component';
+import { FilesystemComponent } from './components/user-dashboard/filesystem/filesystem.component';
 
 
 const routes: Routes = [
@@ -26,8 +28,19 @@ const routes: Routes = [
     component: SignupComponent
   }, 
   {
-    path: 'validateme', 
+    path: 'validate-me', 
     component: ValidateuserComponent
+  }, 
+  {
+    path: 'user-dashboard', 
+    component: UserComponent, 
+    children: [
+      {
+        path: 'filesystem', 
+        component: FilesystemComponent, 
+        outlet: 'user'
+      }
+    ]
   }, 
   {
     path: '**', 

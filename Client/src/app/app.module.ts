@@ -16,13 +16,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ValidateuserComponent } from './components/validateuser/validateuser.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
+import { UserComponent } from './components/user-dashboard/user/user.component';
+import { FilesystemComponent } from './components/user-dashboard/filesystem/filesystem.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FrontpageComponent,
     SignupComponent, 
-    SigninComponent, ValidateuserComponent, NotfoundComponent
+    SigninComponent, 
+    ValidateuserComponent, 
+    NotfoundComponent, 
+    UserComponent, FilesystemComponent
   ],
   imports: [
     BrowserModule,

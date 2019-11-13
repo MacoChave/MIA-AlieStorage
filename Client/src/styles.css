@@ -50,6 +50,12 @@ h1, h2, h3, h4 {
     padding: 0 2em !important;
 }
 
+.favbtn {
+    border-radius: 50% !important;
+    width: 3rem;
+    height: 3rem;
+}
+
 .btn:hover {
     opacity: .7;
 }
@@ -67,6 +73,10 @@ h1, h2, h3, h4 {
 
 .btn__basic__accent {
     color: var(--accent-color) !important;
+}
+
+.btn__basic__primary {
+    color: var(--primary-color) !important;
 }
 
 .toolbar {

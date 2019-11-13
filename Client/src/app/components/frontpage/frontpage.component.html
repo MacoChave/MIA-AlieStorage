@@ -1,4 +1,4 @@
-<button class="btn btn-stroked-primary toolbar__button" [routerLink]="['/signin']" mat-stroked-button>Log in</button>
+<button class="btn btn-stroked-primary toolbar__button" [routerLink]="['/signin']" mat-stroked-button>Sign in</button>
 
 <mat-card class="card">
     <mat-card-header class="card__header">
@@ -11,7 +11,7 @@
         <p>{{ info.ESLOGAN }}</p>
     </mat-card-content>
     <mat-card-actions class="card__actions">
-        <button class="btn btn-flat-primary" mat-flat-button>Get Started</button>
+        <button class="btn btn-flat-primary" [routerLink]="['/signin']" mat-flat-button>Get Started</button>
     </mat-card-actions>
 </mat-card>
 

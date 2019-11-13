@@ -1,0 +1,13 @@
+<mat-sidenav-container class="drawer">
+    <mat-sidenav class="drawer__side" mode='side' [(opened)]='opened'>
+
+    </mat-sidenav>
+
+    <mat-sidenav-content class="drawer__content">
+        <button class="favbtn btn-flat-primary" mat-flat-button (click)='toggle_menu()'>
+            <mat-icon>{{ toggle_button }}</mat-icon>
+        </button>
+        <p>Contenido de carpeta actual</p>
+
+    </mat-sidenav-content>
+</mat-sidenav-container>

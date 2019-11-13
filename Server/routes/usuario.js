@@ -77,7 +77,7 @@ router.post('/', (req, res) => {
                 <h2>Verificar correo electrónico</h2>
                 <p>El correo electrónico proporcionado <i>${EMAIL}</i> es válido</p>
                 <h2>Configura tu contraseña</h2>
-                <p>Para configurar tu contraseña, entra <a href="http://localhost:4200/validateme">aquí</a></p>
+                <p>Para configurar tu contraseña, entra <a href="http://localhost:4200/validate-me">aquí</a></p>
                 <p>Tus credenciales provisionales son: </p>
                 <ul>
                     <li><b>Username: </b>${USERNAME}</li>
@@ -165,7 +165,7 @@ router.put('/reloadpass', (req, res) => {
                 <h2>Verificar correo electrónico</h2>
                 <p>El correo electrónico proporcionado <i>${EMAIL}</i> es válido</p>
                 <h2>Configura tu contraseña</h2>
-                <p>Para configurar tu contraseña, entra <a href="http://localhost:4200/validateme">aquí</a></p>
+                <p>Para configurar tu contraseña, entra <a href="http://localhost:4200/validate-me">aquí</a></p>
                 <p>Tus credenciales provisionales son: </p>
                 <ul>
                     <li><b>Username: </b>${USERNAME}</li>
