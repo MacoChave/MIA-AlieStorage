@@ -1,6 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { User } from 'src/app/modules/User';
 import { UserService } from 'src/app/service/user.service';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-signin',
@@ -28,7 +29,8 @@ export class SigninComponent implements OnInit {
   }
   result: any;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, 
+              private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
   }
@@ -38,5 +40,12 @@ export class SigninComponent implements OnInit {
       res => this.result = res, 
       err => console.error(err)
     )
+  }
+
+  openSnackBar(message: string, snack_class: string) {
+    let config = <MatSnackBarConfig<any>>new MatSnackBarConfig();
+    config.duration = 5000;
+    config.panelClass = ['snackbar', snack_class];
+    this._snackBar.open(message, undefined, config);
   }
 }

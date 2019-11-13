@@ -1,9 +1,8 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { FormControl, FormGroupDirective, NgForm, Validators, FormBuilder } from '@angular/forms';
 import { UserService } from 'src/app/service/user.service';
 import { User } from 'src/app/modules/User';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-signup',
@@ -32,7 +31,7 @@ export class SignupComponent implements OnInit {
   }
   
   constructor(private userService: UserService, 
-              private form: FormBuilder) { }
+              private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
   }
@@ -58,7 +57,14 @@ export class SignupComponent implements OnInit {
     this.user.FOTOGRAFIA += '_profile';
     this.upload();
     this.userService.create(this.user).subscribe(
-      res => console.log(res)
+      () => this.openSnackBar('Su cuenta ha sido creada. Revise su correo electrónico.', 'snackbar--valid')
     )
+  }
+
+  openSnackBar(message: string, snack_class: string) {
+    let config = <MatSnackBarConfig<any>>new MatSnackBarConfig();
+    config.duration = 5000;
+    config.panelClass = ['snackbar', snack_class];
+    this._snackBar.open(message, undefined, config);
   }
 }

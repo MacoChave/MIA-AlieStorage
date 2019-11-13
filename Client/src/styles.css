@@ -8,8 +8,8 @@
     --divider-color: #E4DFCF;
     --light-background: #FAF8F0;
     --dark-background: #043353;
-    --valid-color: rgba(0, 150, 0, 0.25);
-    --invalid-color: rgba(150, 0, 0, 0.25);
+    --valid-color: rgba(0, 150, 0, 0.70);
+    --invalid-color: rgba(150, 0, 0, 0.70);
 }
 
 html, body { height: 100%; }
@@ -82,6 +82,19 @@ h1, h2, h3, h4 {
 
 .toolbar__spacer {
     flex: 1 1 auto;
+}
+
+.snackbar {
+    font-weight: bold;
+    color: var(--secondary-text)
+}
+
+.snackbar--valid {
+    background: var(--valid-color);
+}
+
+.snackbar--invalid {
+    background: var(--invalid-color);
 }
 
 .divider {

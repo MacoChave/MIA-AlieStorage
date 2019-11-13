@@ -123,21 +123,25 @@ router.post('/validate', (req, res) => {
     console.log(CORRECT)
     if (CORRECT) {
         executor.sp(
-            `SET SERVEROUTPUT ON; 
-            BEGIN 
+            `BEGIN 
                 SP_SETTINGPASS(:username, :pass, :genpass, :out_result);
             END`, 
             {
+                out_result: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }, 
                 username: USERNAME, 
                 pass: PASS, 
-                genpass: GENPASS, 
-                out_result: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+                genpass: GENPASS
             }
         )
         .then(result => {
-            console.log(result);
             res.json({
                 MESSAGE: 'Validate complete', 
+                ROWS_AFFECTED: result.outBinds.out_result
+            });
+        })
+        .catch(err => {
+            err.json({
+                MESSAGE: 'Sin registros', 
                 ROWS_AFFECTED: result.outBinds.out_result
             });
         })

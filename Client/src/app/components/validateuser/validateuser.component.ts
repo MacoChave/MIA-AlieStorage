@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/modules/User';
 import { UserService } from 'src/app/service/user.service';
 import { Result } from 'src/app/modules/Result';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-validateuser',
@@ -29,7 +30,8 @@ export class ValidateuserComponent implements OnInit {
   GENPASS: string;
   result: Result;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, 
+              private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
   }
@@ -39,19 +41,38 @@ export class ValidateuserComponent implements OnInit {
       res => {
         this.result = res;
         console.log(this.result);
-        if (this.result.ROWS_AFFECTED > 0) console.info('Se ha verificado la cuenta')
-        else if (this.result.ROWS_AFFECTED < 0) console.error('Verificar el dato ingresado')
-        else {
+        if (this.result.ROWS_AFFECTED == 1) {
+          // CONFIGURACION SATISFACTORIO
+          this.openSnackBar('Configuración de su cuenta con éxito', 'snackbar--valid')
+        }
+        else if (this.result.ROWS_AFFECTED == -1) {
+          // TIEMPO CADUCADO
           this.userService.reloadpass(this.user, this.GENPASS).subscribe(
             res => {
-              console.log(res);
-              console.info('Contraseña temporal reenviada');
+              this.openSnackBar('El tiempo ha caducado, Revise su correo electrónico', 'snackbar--invalid')
             }, 
             err => console.error(err)
           )
         }
+        else if (this.result.ROWS_AFFECTED == -2) {
+          // CREDENCIALES INCORRECTOS
+          this.openSnackBar('Credenciales incorrectas', 'snackbar--invalid')
+        }
+        else {
+          // CONTRASEÑA EN CONTRA DE LAS REGLAS
+          this.openSnackBar('Su contraseña no sigue las reglas de la politica', 'snackbar--invalid')
+        }
       }, 
-      err => console.error(err)
+      err => {
+        console.error(err);
+      }
     )
+  }
+
+  openSnackBar(message: string, snack_class: string) {
+    let config = <MatSnackBarConfig<any>>new MatSnackBarConfig();
+    config.duration = 5000;
+    config.panelClass = ['snackbar', snack_class];
+    this._snackBar.open(message, undefined, config);
   }
 }

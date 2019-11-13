@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   exports: [
@@ -13,7 +14,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatCardModule, 
     MatInputModule, 
     MatSelectModule, 
-    MatDatepickerModule
+    MatDatepickerModule, 
+    MatSnackBarModule
   ],
   imports: [
     MatToolbarModule, 
@@ -21,7 +23,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatCardModule, 
     MatInputModule, 
     MatSelectModule, 
-    MatDatepickerModule
+    MatDatepickerModule, 
+    MatSnackBarModule
   ]
 })
 export class MaterialModule { }

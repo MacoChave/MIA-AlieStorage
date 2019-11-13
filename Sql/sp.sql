@@ -1,141 +1,134 @@
 -- CREAR USUARIO
 CREATE OR REPLACE PROCEDURE SP_NEWUSER(
-    nombre IN VARCHAR2, 
-    apellido IN VARCHAR2, 
-    username IN VARCHAR2, 
-    pass IN VARCHAR2, 
-    email IN VARCHAR2, 
-    telefono IN NUMBER, 
-    fotografia IN VARCHAR2, 
-    genero IN VARCHAR2, 
-    nacimiento IN TIMESTAMP, 
-    direccion IN VARCHAR2, 
-    tipo IN VARCHAR2, 
-    out_result OUT NUMBER
+    i_nombre IN VARCHAR2, 
+    i_apellido IN VARCHAR2, 
+    i_username IN VARCHAR2, 
+    i_pass IN VARCHAR2, 
+    i_email IN VARCHAR2, 
+    i_telefono IN NUMBER, 
+    i_fotografia IN VARCHAR2, 
+    i_genero IN VARCHAR2, 
+    i_nacimiento IN TIMESTAMP, 
+    i_direccion IN VARCHAR2, 
+    i_tipo IN VARCHAR2, 
+    i_out_result OUT NUMBER
 ) IS 
     codigo_tipo NUMBER;
     i NUMBER;
 BEGIN 
     SELECT COD_TIPO INTO codigo_tipo 
     FROM TIPO 
-    WHERE DESCRIPCION LIKE INITCAP(tipo);
+    WHERE DESCRIPCION LIKE INITCAP(i_tipo);
 
     INSERT INTO USUARIO 
         (NOMBRE, APELLIDO, USERNAME, PASS, EMAIL, TELEFONO, FOTOGRAFIA, GENERO, FECHA_NACIMIENTO, DIRECCION, COD_TIPO) 
     VALUES 
-        (nombre, apellido, username, pass, email, telefono, fotografia, genero, nacimiento, direccion, codigo_tipo);
+        (i_nombre, i_apellido, i_username, i_pass, i_email, i_telefono, i_fotografia, i_genero, i_nacimiento, i_direccion, codigo_tipo);
     i := SQL%ROWCOUNT;
     
-    out_result := i;
-    DBMS_OUTPUT.PUT_LINE(out_result);
+    i_out_result := i;
+    DBMS_OUTPUT.PUT_LINE(i_out_result);
 END;
 
 -- ACTUALIZAR CONTRASEÑA
 CREATE OR REPLACE PROCEDURE SP_SETTINGPASS (
-    in_username IN VARCHAR2, 
-    in_pass IN VARCHAR2, 
-    in_genpass IN VARCHAR2, 
-    out_result OUT NUMBER
+    i_username IN VARCHAR2, 
+    i_pass IN VARCHAR2, 
+    i_genpass IN VARCHAR2, 
+    i_out_result OUT NUMBER
 ) IS 
     creacion TIMESTAMP;
     actual TIMESTAMP;
     counting NUMBER;
     i NUMBER;
 BEGIN 
-    SELECT FECHA_VALIDACION 
-    INTO creacion 
+    SELECT FECHA_VALIDACION INTO creacion 
     FROM USUARIO 
     WHERE 
-        USERNAME LIKE in_username AND 
+        USERNAME LIKE i_username AND 
+        PASS LIKE i_genpass AND 
         ROWNUM = 1;
     
     SELECT SYSTIMESTAMP INTO actual 
     FROM DUAL;
 
-    SELECT COUNT(USERNAME) INTO counting 
-    FROM USUARIO 
-    WHERE 
-        USERNAME LIKE in_username AND 
-        PASS LIKE in_genpass AND 
-        ROWNUM = 1;
-    
     IF (EXTRACT(MINUTE FROM actual) - EXTRACT(MINUTE FROM creacion) < 1) THEN 
-        IF (counting > 0) THEN 
-            UPDATE USUARIO 
-            SET 
-                pass = in_pass, 
-                estado = 'C'
-            WHERE username = in_username;
-            i := SQL%ROWCOUNT;
-            
-            COMMIT;
-            out_result := i;
-        ELSE
-            out_result := -1;
-        END IF;
-        DBMS_OUTPUT.PUT_LINE(out_result);
+        UPDATE USUARIO 
+        SET 
+            pass = i_pass, 
+            estado = 'C'
+        WHERE 
+            username = i_username AND 
+            pass = i_genpass;
+        i := SQL%ROWCOUNT;
+        
+        COMMIT;
+        i_out_result := i;
+        DBMS_OUTPUT.PUT_LINE('CONTRASEÑA CONFIGURADA');
     ELSE 
         UPDATE USUARIO 
         SET 
             estado = 'A'
-        WHERE username = in_username;
-        out_result := 0;
-        DBMS_OUTPUT.PUT_LINE(out_result);
+        WHERE 
+            username = i_username AND 
+            pass = i_genpass;
+        i_out_result := -1;
+        DBMS_OUTPUT.PUT_LINE('TIEMPO CADUCADO');
     END IF;
 EXCEPTION 
     WHEN NO_DATA_FOUND THEN
-          out_result := -2;
-          DBMS_OUTPUT.PUT_LINE(out_result);
+          i_out_result := -2;
+          DBMS_OUTPUT.PUT_LINE('SIN REGISTROS');
 END;
 
 -- MODIFICAR USUARIO 
 CREATE OR REPLACE PROCEDURE SP_UPDATEUSER(
-    codigo IN NUMBER, 
-    nombre IN VARCHAR2, 
-    apellido IN VARCHAR2, 
-    pass IN VARCHAR2, 
-    telefono IN NUMBER, 
-    direccion IN VARCHAR2, 
-    out_result OUT NUMBER 
+    i_codigo IN NUMBER, 
+    i_nombre IN VARCHAR2, 
+    i_apellido IN VARCHAR2, 
+    i_pass IN VARCHAR2, 
+    i_telefono IN NUMBER, 
+    i_direccion IN VARCHAR2, 
+    i_out_result OUT NUMBER 
 ) IS 
     i NUMBER;
 BEGIN 
     UPDATE USUARIO 
     SET
-        NOMBRE = nombre, 
-        APELLIDO = apellido, 
-        PASS = pass, 
-        DIRECCION = direccion, 
-        TELEFONO = telefono
+        NOMBRE = i_nombre, 
+        APELLIDO = i_apellido, 
+        PASS = i_pass, 
+        DIRECCION = i_direccion, 
+        TELEFONO = i_telefono
     WHERE 
-        cod_usuario = codigo;
+        cod_usuario = i_codigo;
     i := SQL%ROWCOUNT;
 
-    out_result := i;
-    DBMS_OUTPUT.PUT_LINE(out_result);
+    i_out_result := i;
+    DBMS_OUTPUT.PUT_LINE('USUARIO ACTUALIZADO');
 END;
 
 -- MODIFICAR ROL
 CREATE OR REPLACE PROCEDURE SP_UPDATEROL (
-    codigo IN NUMBER, 
-    tipo IN VARCHAR2, 
-    out_result OUT NUMBER  
+    i_codigo IN NUMBER, 
+    i_tipo IN VARCHAR2, 
+    i_out_result OUT NUMBER  
 ) IS 
     codigo_tipo NUMBER; 
     i NUMBER;
 BEGIN 
     SELECT cod_tipo INTO codigo_tipo
     FROM TIPO 
-    WHERE descripcion LIKE INITCAP(tipo);
+    WHERE descripcion LIKE INITCAP(i_tipo);
 
     UPDATE USUARIO 
     SET cod_tipo = codigo_tipo 
-    WHERE cod_usuario = codigo;
+    WHERE cod_usuario = i_codigo;
 
     i := SQL%ROWCOUNT;
 
-    out_result := i;
-    DBMS_OUTPUT.PUT_LINE(out_result);
+    i_out_result := i;
+    DBMS_OUTPUT.PUT_LINE('ROL ACTUALIZADO');
 END;
 
 -- PRUEBAS
