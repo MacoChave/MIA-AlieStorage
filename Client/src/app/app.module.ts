@@ -5,14 +5,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { InfoService } from './service/info.service';
+import { UserService } from './service/user.service';
+import { SyncService } from './service/sync.service';
+
+import { MaterialModule } from './material/material.module';
 
 import { FrontpageComponent } from './components/frontpage/frontpage.component';
-import { MaterialModule } from './material/material.module';
 import { SigninComponent } from './components/signin/signin.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ValidateuserComponent } from './components/validateuser/validateuser.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
@@ -40,7 +43,9 @@ import { FilesystemComponent } from './components/user-dashboard/filesystem/file
     MatNativeDateModule
   ],
   providers: [
-    InfoService
+    InfoService, 
+    UserService, 
+    SyncService
   ],
   bootstrap: [AppComponent], 
   entryComponents: [

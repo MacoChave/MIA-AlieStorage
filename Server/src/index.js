@@ -26,6 +26,7 @@ app.use('/api/archivo', require('../routes/archivo'));
 app.use('/api/detalledisco', require('../routes/detalledisco'));
 app.use('/api/chat', require('../routes/chat'));
 app.use('/api/detallechat', require('../routes/detallechat'));
+app.use('/api/sync', require('../routes/sync'));
 
 
 // STARTING THE SERVER

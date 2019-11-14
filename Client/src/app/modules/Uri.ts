@@ -11,4 +11,5 @@ export class Uri {
     static DETALLEDISCO : string = `${Uri.API_URI}/detalledisco`;
     static CHAT         : string = `${Uri.API_URI}/chat`;
     static DETALLECHAT  : string = `${Uri.API_URI}/detallechat`;
+    static SYNC         : string = `${Uri.API_URI}/sync`;
 }
