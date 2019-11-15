@@ -39,7 +39,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    const { username } = req.params;
+    const { id } = req.params;
 
     executor.query(
         `SELECT 
@@ -49,8 +49,8 @@ router.get('/:id', (req, res) => {
             Usuario U, Tipo T
         WHERE 
             U.COD_TIPO = T.COD_TIPO AND 
-            COD_USUARIO = :id;`, 
-        [username]
+            COD_USUARIO = :cod_usuario`, 
+        { cod_usuaio: id }
     )
     .then(result => {
         res.json(result.rows);
@@ -107,11 +107,19 @@ router.post('/', (req, res) => {
         }
     )
     .then(result => {
-        email.sendMail(mailOptions)
-        console.log(result.outBinds.OUT_RESULT);
+        if (result.outBinds.out_result > 0)
+            email.sendMail(mailOptions)
+            
         res.json({ 
             MESSAGE: 'User was inserted successfully', 
             ROWS_AFFECTED: result.outBinds.OUT_RESULT
+        });
+    })
+    .catch(err => {
+        res.json({ 
+            MESSAGE: "User wasn't created", 
+            ROWS_AFFECTED: result.outBinds.OUT_RESULT, 
+            RESPONSE: err
         });
     })
 })
@@ -142,13 +150,15 @@ router.post('/validate', (req, res) => {
         .catch(err => {
             err.json({
                 MESSAGE: 'Sin registros', 
-                ROWS_AFFECTED: result.outBinds.out_result
+                ROWS_AFFECTED: result.outBinds.out_result, 
+                RESPONSE: err
             });
         })
     } else {
         res.json({
             MESSAGE: 'Wrong password', 
-            ROWS_AFFECTED: -3
+            ROWS_AFFECTED: -3, 
+            RESPONSE: err
         })
     }
 })
@@ -180,7 +190,11 @@ router.put('/reloadpass', (req, res) => {
         WHERE 
             USERNAME = :username AND 
             PASS = :genpass`, 
-        { PASS, USERNAME, GENPASS }
+        {
+            pass: PASS, 
+            username: USERNAME, 
+            genpass: GENPASS
+        }
     )
     .then(result => {
         email.sendMail(mailOptions)
@@ -188,21 +202,43 @@ router.put('/reloadpass', (req, res) => {
             MESSAGE: 'Password was reloaded successfully', 
             ROWS_AFFECTED: result.rowsAffected
         })
-    });
+    })
+    .catch(err => {
+        res.json({
+            MESSAGE: "Password wasn't reloaded", 
+            ROWS_AFFECTED: result.rowsAffected, 
+            RESPONSE: err
+        })
+    })
 })
 
 router.post('/check', (req, res) => {
     const { USERNAME, PASS } = req.body;
+    console.info(USERNAME)
+    console.info(PASS)
 
     executor.query(
-        `SELECT * FROM USUARIO 
+        `SELECT 
+            COD_USUARIO ,
+            NOMBRE , APELLIDO , USERNAME , PASS ,
+            EMAIL , TELEFONO , DIRECCION ,
+            FOTOGRAFIA , GENERO , 
+            FECHA_NACIMIENTO , FECHA_REGISTRO , FECHA_VALIDACION ,
+            ESTADO , TIPO  
+        FROM VIEW_USUARIO 
         WHERE 
             USERNAME LIKE :username AND 
             PASS LIKE :pass`, 
-        [USERNAME, PASS]
+        {
+            username: USERNAME, 
+            pass: PASS
+        }
     )
     .then(result => {
         res.json(result.rows);
+    })
+    .catch(err => {
+        res.json(err);
     })
 })
 

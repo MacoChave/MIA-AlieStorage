@@ -6,11 +6,13 @@ export interface User {
     PASS ?: string;
     EMAIL ?: string;
     TELEFONO ?: number;
+    DIRECCION ?: string; 
     FOTOGRAFIA ?: string;
     GENERO ?: string;
     FECHA_NACIMIENTO ?: string;
     FECHA_REGISTRO ?: string;
-    DIRECCION ?: string; 
+    FECHA_VALIDACION ?: string;
+    ESTADO ?: string;
     TIPO ?: string; 
     COD_TIPO ?: number;
 };

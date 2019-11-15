@@ -9,7 +9,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { InfoService } from './service/info.service';
 import { UserService } from './service/user.service';
-import { SyncService } from './service/sync.service';
 
 import { MaterialModule } from './material/material.module';
 
@@ -44,8 +43,7 @@ import { FilesystemComponent } from './components/user-dashboard/filesystem/file
   ],
   providers: [
     InfoService, 
-    UserService, 
-    SyncService
+    UserService
   ],
   bootstrap: [AppComponent], 
   entryComponents: [

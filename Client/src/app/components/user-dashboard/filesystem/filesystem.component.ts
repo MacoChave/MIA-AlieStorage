@@ -1,6 +1,9 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
+import { FilesystemService } from 'src/app/service/filesystem.service';
+import { Disk } from 'src/app/modules/Disk';
+import { User } from 'src/app/modules/User';
 
 @Component({
   selector: 'app-filesystem',
@@ -25,11 +28,21 @@ export class FilesystemComponent implements OnInit {
   treeFlattener = new MatTreeFlattener(this._transformer, node => node.level, node => node.expandable, node => node.children)
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener)
 
-  constructor() {
+  disks: Disk[];
+  user: User = {};
+
+  constructor(private fs: FilesystemService) {
     this.dataSource.data = TREE_DATA;
   }
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('session'));
+    this.fs.getDisk(this.user.COD_USUARIO.toString()).subscribe(
+      res => {
+        this.disks = res;
+        console.info(this.disks);
+      }
+    )
   }
 
   toggle_menu() {

@@ -2,6 +2,7 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { User } from 'src/app/modules/User';
 import { UserService } from 'src/app/service/user.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -24,21 +25,42 @@ export class SigninComponent implements OnInit {
     GENERO: '', 
     FECHA_NACIMIENTO: '', 
     FECHA_REGISTRO: '', 
+    FECHA_VALIDACION: '', 
     COD_TIPO: 0, 
-    TIPO: 'Cliente'
+    TIPO: 'Cliente', 
+    DIRECCION: '', 
+    ESTADO: '' 
   }
   result: any;
 
   constructor(private userService: UserService, 
-              private _snackBar: MatSnackBar) { }
+              private _snackBar: MatSnackBar, 
+              private router: Router) { }
 
   ngOnInit() {
   }
 
   signin() {
     this.userService.check(this.user).subscribe(
-      res => this.result = res, 
-      err => console.error(err)
+      res => {
+        if (res != null) {
+          this.user = res[0];
+          console.log(this.user);
+          this.openSnackBar(`Bienvenido ${this.user.USERNAME}`, 'snackbar--valid')
+          localStorage.setItem('session', JSON.stringify(this.user));
+          if (this.user.TIPO === 'Cliente') {
+            this.router.navigate(['user-dashboard']);
+          }
+          else if (this.user.TIPO === 'Admin') {
+            // TODO: GO TO ADMIN DASHBOARD
+          }
+          else {
+            // TODO: GO TO ROOT DASHBOARD
+          }
+        }
+        else this.openSnackBar('Usuario y/o contraseña inválida', 'snackbar--invalid')
+      }, 
+      err => this.openSnackBar('Usuario y/o contraseña inválida', 'snackbar--invalid')
     )
   }
 

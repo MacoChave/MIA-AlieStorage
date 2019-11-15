@@ -45,11 +45,14 @@ export class SignupComponent implements OnInit {
   }
 
   addDate(event: MatDatepickerInputEvent<Date>) {
-    this.user.FECHA_NACIMIENTO = `${event.value.getMonth()}-${event.value.getDay()}-${event.value.getFullYear()}`;
+    this.user.FECHA_NACIMIENTO = `${event.value.getDay()}-${event.value.getMonth()}-${event.value.getFullYear()}`;
   }
 
   upload() {
-    this.userService.postProfile(this.image, this.user.FOTOGRAFIA);
+    this.userService.postProfile(this.image, this.user.FOTOGRAFIA).subscribe(
+      res => console.log(res), 
+      err => console.error(err)
+    )
   }
 
   signup() {
@@ -57,7 +60,8 @@ export class SignupComponent implements OnInit {
     this.user.FOTOGRAFIA += '_profile';
     this.upload();
     this.userService.create(this.user).subscribe(
-      () => this.openSnackBar('Su cuenta ha sido creada. Revise su correo electrónico.', 'snackbar--valid')
+      (res) => this.openSnackBar('Su cuenta ha sido creada. Revise su correo electrónico.', 'snackbar--valid'), 
+      (err) => this.openSnackBar('Su cuenta no se ha creado.', 'snackbar--invalid'), 
     )
   }
 

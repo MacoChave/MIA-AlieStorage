@@ -21,10 +21,7 @@ export class UserService {
   postProfile(file: File, filename: string) {
     const formData = new FormData();
     formData.append('image', file);
-    return this.http.post(`${Uri.USUARIO}/profile/${filename}`, formData).subscribe(
-      (res) => console.log(res),
-      (err) => console.log(err)
-    );
+    return this.http.post(`${Uri.USUARIO}/profile/${filename}`, formData);
   }
 
   create(user: User) {
