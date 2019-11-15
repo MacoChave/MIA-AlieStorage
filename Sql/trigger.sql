@@ -1,0 +1,34 @@
+CREATE OR REPLACE TRIGGER TRG_NEWFOLDER
+    AFTER INSERT ON CARPETA 
+    FOR EACH ROW 
+BEGIN 
+    INSERT INTO JOURNAL
+        (cod_particion, string1, permission)
+    VALUES 
+        (:NEW.COD_PARTICION, :NEW.NOMBRE, :NEW.PERMISO)
+END;
+
+CREATE OR REPLACE TRIGGER TRG_NEWFILE
+    AFTER INSERT ON ARCHIVO 
+    FOR EACH ROW 
+DECLARE 
+    particion NUMBER;
+BEGIN 
+    SELECT cod_particion INTO particion 
+    FROM CARPETA 
+    WHERE cod_carpeta = :NEW.COD_CARPETA;
+    
+    INSERT INTO JOURNAL
+        (cod_particion, string1, permission)
+    VALUES 
+        (particion, :NEW.NOMBRE, :NEW.PERMIOS);
+END;
+
+CREATE OR REPLACE TRIGGER TRG_NEWFS 
+    AFTER INSERT ON PARTICION 
+    FOR EACH ROW 
+DECLARE 
+    cod_carpeta NUMBER;
+BEGIN 
+    SP_NEWFOLDER(cod_carpeta, :NEW.COD_PARTICION, 0, '/', 777, 0);
+END;
