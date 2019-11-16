@@ -29,6 +29,11 @@ export class SignupComponent implements OnInit {
     COD_TIPO: 0, 
     TIPO: 'Cliente'
   }
+
+  list_genero = [
+    { nombre: 'Masculino', value: 'm' }, 
+    { nombre: 'Femenino', value: 'f' }
+  ]
   
   constructor(private userService: UserService, 
               private _snackBar: MatSnackBar) { }
@@ -59,6 +64,7 @@ export class SignupComponent implements OnInit {
     this.user.FOTOGRAFIA = this.user.USERNAME.replace(/ /g, '-');
     this.user.FOTOGRAFIA += '_profile';
     this.upload();
+    console.log(this.user);
     this.userService.create(this.user).subscribe(
       (res) => this.openSnackBar('Su cuenta ha sido creada. Revise su correo electrónico.', 'snackbar--valid'), 
       (err) => this.openSnackBar('Su cuenta no se ha creado.', 'snackbar--invalid'), 

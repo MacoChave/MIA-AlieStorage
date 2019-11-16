@@ -43,19 +43,20 @@ export class SigninComponent implements OnInit {
   signin() {
     this.userService.check(this.user).subscribe(
       res => {
-        if (res != null) {
-          this.user = res[0];
-          console.log(this.user);
+        this.user = res[0];
+        console.log(this.user);
+        if (this.user != undefined) {
           this.openSnackBar(`Bienvenido ${this.user.USERNAME}`, 'snackbar--valid')
           localStorage.setItem('session', JSON.stringify(this.user));
-          if (this.user.TIPO === 'Cliente') {
-            this.router.navigate(['user-dashboard']);
+          if (this.user.TIPO === 'Root') {
+            // TODO: GO TO ROOT DASHBOARD
           }
           else if (this.user.TIPO === 'Admin') {
             // TODO: GO TO ADMIN DASHBOARD
           }
           else {
-            // TODO: GO TO ROOT DASHBOARD
+            // TODO: GO TO CLIENTE DASHBOARD
+            this.router.navigate(['user-dashboard']);
           }
         }
         else this.openSnackBar('Usuario y/o contraseña inválida', 'snackbar--invalid')

@@ -6,46 +6,53 @@ const router = new Router();
 
 router.get('/', (req, res) => {
     executor.query(
-        `SELECT
-            COD_USUARIO,
-            COD_DISCO,
-            NOMBRE,
-            SIZE_DISCO, 
-            UNIT
-        FROM view_disco`, 
+        `SELECT 
+            DD.COD_USUARIO,
+            HD.COD_DISCO,
+            HD.NOMBRE,
+            HD.SIZE_DISCO, 
+            HD.UNIT
+        FROM 
+            detalledisco DD, 
+            discovirtual HD, 
+            usuario U 
+        WHERE 
+            dd.cod_usuario = u.cod_usuario AND 
+            dd.cod_disco = hd.cod_disco`, 
         {}
     )
     .then(result => {
-        res.json(result);
+        res.json(result.rows);
     })
     .catch(err => {
-        res.json({
-            message: 'Problemas buscando los discos'
-        })
+        res.json([{}])
     })
 });
 
 router.get('/:id', (req, res) => {
     const { id } = req.params;
     executor.query(
-        `SELECT
-            COD_USUARIO,
-            COD_DISCO,
-            NOMBRE,
-            SIZE_DISCO, 
-            UNIT
-        FROM view_disco
+        `SELECT 
+            DD.COD_USUARIO,
+            HD.COD_DISCO,
+            HD.NOMBRE,
+            HD.SIZE_DISCO, 
+            HD.UNIT
+        FROM 
+            detalledisco DD, 
+            discovirtual HD, 
+            usuario U 
         WHERE 
-            COD_USUARIO = :cod_usuario`, 
+            dd.cod_usuario = u.cod_usuario AND 
+            dd.cod_disco = hd.cod_disco AND
+            u.cod_usuario = :cod_usuario`, 
         { cod_usuario: id }
     )
     .then(result => {
         res.json(result.rows);
     })
     .catch(err => {
-        res.json({
-            message: 'Problemas buscando los discos'
-        })
+        res.json([{}])
     })
 });
 

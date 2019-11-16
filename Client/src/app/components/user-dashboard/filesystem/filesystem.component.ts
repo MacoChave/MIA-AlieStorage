@@ -1,9 +1,9 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
 import { FilesystemService } from 'src/app/service/filesystem.service';
 import { Disk } from 'src/app/modules/Disk';
 import { User } from 'src/app/modules/User';
+import { Partition } from 'src/app/modules/Partition';
+import { Folder } from 'src/app/modules/Folder';
 
 @Component({
   selector: 'app-filesystem',
@@ -16,30 +16,26 @@ export class FilesystemComponent implements OnInit {
   opened: boolean = false;
   toggle_button = 'arrow_forward';
   
-  private _transformer = (node: FoodNode, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0, 
-      name: node.name, 
-      level: level
-    }
-  }
-  
-  treeControl = new FlatTreeControl<ExampleFlatNode>(node => node.level, node => node.expandable)
-  treeFlattener = new MatTreeFlattener(this._transformer, node => node.level, node => node.expandable, node => node.children)
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener)
-
   disks: Disk[];
+  parts: Partition[];
+  folders: Folder[];
   user: User = {};
 
-  constructor(private fs: FilesystemService) {
-    this.dataSource.data = TREE_DATA;
+  history: Array<Folder> = [];
+
+  label = {
+    DISCO: 0, 
+    PARTICION: 0, 
+    FOLDER: 0
   }
+
+  constructor(private fsService: FilesystemService) {}
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('session'));
-    this.fs.getDisk(this.user.COD_USUARIO.toString()).subscribe(
+    this.fsService.getDisk(this.user.COD_USUARIO).subscribe(
       res => {
-        this.disks = res;
+        this.disks = <Disk[]>res;
         console.info(this.disks);
       }
     )
@@ -50,50 +46,40 @@ export class FilesystemComponent implements OnInit {
     this.toggle_button = (this.opened) ? 'close' : 'arrow_forward';
   }
 
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
-}
+  changeDisk() {
+    this.fsService.getParts(this.label.DISCO).subscribe(
+      res => {
+        this.parts = <Partition[]>res
+        console.info(this.parts)
+      }, 
+      err => console.error(err)
+    )
+  }
 
+  changePart() {
+    this.fsService.getRootContent(this.label.PARTICION).subscribe(
+      res => this.folders = <Folder[]>res, 
+      err => console.error(err)
+    )
+  }
 
-/**
- * Food data with nested structure.
- * Each node has a name and an optiona list of children.
- */
-interface FoodNode {
-  name: string;
-  children?: FoodNode[];
-}
+  getChildren(folder: Folder) {
+    this.history.push(folder);
+    this.fsService.getFolderContent(folder.COD_PARTICION, folder.COD_CARPETA).subscribe(
+      res => {
+        this.folders = <Folder[]>res
+        console.log(this.folders)
+      }, 
+      err => console.error(err)
+    )
+  }
 
-const TREE_DATA: FoodNode[] = [
-  {
-    name: 'Fruit',
-    children: [
-      {name: 'Apple'},
-      {name: 'Banana'},
-      {name: 'Fruit loops'},
-    ]
-  }, {
-    name: 'Vegetables',
-    children: [
-      {
-        name: 'Green',
-        children: [
-          {name: 'Broccoli'},
-          {name: 'Brussel sprouts'},
-        ]
-      }, {
-        name: 'Orange',
-        children: [
-          {name: 'Pumpkins'},
-          {name: 'Carrots'},
-        ]
-      },
-    ]
-  },
-];
-
-/** Flat node with expandable and level information */
-interface ExampleFlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
+  returnTo(folder: Folder) {
+    this.fsService.getUpTo(folder.COD_PARTICION, folder.COD_CARPETA).subscribe(
+      res => {
+        this.folders = <Folder[]>res
+        this.history = this.history.slice(0, this.history.indexOf(folder))
+      }
+    )
+  }
 }

@@ -1,30 +1,71 @@
 <mat-sidenav-container class="drawer">
     <mat-sidenav class="drawer__side" mode='side' [(opened)]='opened'>
-        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <!-- This is the tree node template for leaf nodes -->
-            <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-                <!-- use a disabled button to provide padding for tree leaf -->
-                <button mat-icon-button disabled></button>
-                {{node.name}}
-            </mat-tree-node>
-            <!-- This is the tree node template for expandable nodes -->
-            <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
-                <button mat-icon-button matTreeNodeToggle
-                        [attr.aria-label]="'toggle ' + node.name">
-                <mat-icon class="mat-icon-rtl-mirror">
-                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-                </mat-icon>
-                </button>
-                {{node.name}}
-            </mat-tree-node>
-        </mat-tree>
+        
     </mat-sidenav>
 
     <mat-sidenav-content class="drawer__content">
-        <button class="favbtn btn-basic-primary" mat-flat-button (click)='toggle_menu()'>
-            <mat-icon>{{ toggle_button }}</mat-icon>
-        </button>
-        <p>Contenido de carpeta actual</p>
+
+        <div class="flex-container">
+            <!-- TOGGLE BUTTON MENU -->
+            <div class="item">
+                <button class="favbtn btn-basic-primary" mat-flat-button (click)='toggle_menu()'>
+                    <mat-icon>{{ toggle_button }}</mat-icon>
+                </button>
+            </div>
+            
+            <!-- SELECT VIRTUAL DISK -->
+            <div class="item">
+                <mat-form-field>
+                <mat-label>Selecciona el disco</mat-label>
+                <mat-select [(value)]='label.DISCO' (selectionChange)='changeDisk()'>
+                    <mat-option *ngFor="let disk of disks" [value]="disk.COD_DISCO">
+                        {{ disk.NOMBRE }}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
+            </div>
+
+            <!-- SELECT PARTITION -->
+            <div class="item">
+                <mat-form-field>
+                <mat-label>Selecciona una partición</mat-label>
+                <mat-select [(value)]='label.PARTICION' (selectionChange)='changePart()'>
+                    <mat-option *ngFor="let item of parts" [value]="item.COD_PARTICION">
+                        {{ item.NOMBRE }}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- <i class="material-icons">folder_open</i> -->
+        <!-- <i class="material-icons">create_new_folder</i> -->
+        <!-- <i class="material-icons">post_add</i> -->
+        <!-- <i class="material-icons">save</i> -->
+        <!-- <i class="material-icons">delete</i> -->
+        <!-- <i class="material-icons">description</i> -->
+
+        <ul class="history">
+            <li class="history__item" *ngFor='let item of history'>
+                <a (click)='returnTo(item)' class="history__link">{{ item.NOMBRE }}</a>
+            </li>
+        </ul>
+        
+        <!-- CONTENT OF CURRENT FOLDER -->
+        <div class="folder__container" *ngIf='folders != null && folders.length > 0; else emptyContainer'>
+            <div class="folder" *ngFor='let folder of folders' (click)='getChildren(folder)'>
+                <div class="folder__header">
+                    <i *ngIf='folder.TIPO == 0' class="folder__header-icon material-icons">folder</i>
+                    <i *ngIf='folder.TIPO == 1' class="folder__header-icon material-icons">description</i>
+                    <p class="folder__header-title"> {{ folder.NOMBRE }} </p>
+                </div>
+                <div class="folder__footer">
+                    <p> {{ folder.FECHA_CREACION | date: 'yyyy-MM-dd' }} </p>
+                </div>
+            </div>
+        </div>
+        <ng-template class="folder-container" #emptyContainer>
+        </ng-template>
 
     </mat-sidenav-content>
 </mat-sidenav-container>

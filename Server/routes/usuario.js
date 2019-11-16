@@ -49,7 +49,7 @@ router.get('/:id', (req, res) => {
             Usuario U, Tipo T
         WHERE 
             U.COD_TIPO = T.COD_TIPO AND 
-            COD_USUARIO = :cod_usuario`, 
+            U.COD_USUARIO = :cod_usuario`, 
         { cod_usuaio: id }
     )
     .then(result => {
@@ -82,7 +82,7 @@ router.post('/', (req, res) => {
                 <ul>
                     <li><b>Username: </b>${USERNAME}</li>
                     <li><b>Contraseña: </b>${PASS}</li>
-                    </ul>`
+                </ul>`
                 }
     executor.sp(
         `BEGIN 
@@ -185,11 +185,11 @@ router.put('/reloadpass', (req, res) => {
     executor.query(
         `UPDATE USUARIO 
         SET 
-            PASS = :pass,  
-            FECHA_VALIDACION = CURRENT_TIMESTAMP 
+            USUARIO.PASS = :pass,  
+            USUARIO.FECHA_VALIDACION = CURRENT_TIMESTAMP 
         WHERE 
-            USERNAME = :username AND 
-            PASS = :genpass`, 
+            USUARIO.USERNAME = :username AND 
+            USUARIO.PASS = :genpass`, 
         {
             pass: PASS, 
             username: USERNAME, 
@@ -214,27 +214,27 @@ router.put('/reloadpass', (req, res) => {
 
 router.post('/check', (req, res) => {
     const { USERNAME, PASS } = req.body;
+
     console.info(USERNAME)
     console.info(PASS)
-
     executor.query(
         `SELECT 
-            COD_USUARIO ,
-            NOMBRE , APELLIDO , USERNAME , PASS ,
-            EMAIL , TELEFONO , DIRECCION ,
-            FOTOGRAFIA , GENERO , 
-            FECHA_NACIMIENTO , FECHA_REGISTRO , FECHA_VALIDACION ,
-            ESTADO , TIPO  
-        FROM VIEW_USUARIO 
+            COD_USUARIO, NOMBRE, APELLIDO, USERNAME, PASS, EMAIL, 
+            TELEFONO, DIRECCION, FOTOGRAFIA, GENERO, FECHA_NACIMIENTO, 
+            FECHA_REGISTRO, FECHA_VALIDACION, ESTADO, DESCRIPCION AS TIPO
+        FROM 
+            USUARIO U, TIPO T
         WHERE 
-            USERNAME LIKE :username AND 
-            PASS LIKE :pass`, 
+            U.COD_TIPO = T.COD_TIPO AND
+            U.USERNAME LIKE :username AND 
+            U.PASS LIKE :pass`, 
         {
             username: USERNAME, 
             pass: PASS
         }
     )
     .then(result => {
+        console.log(result);
         res.json(result.rows);
     })
     .catch(err => {

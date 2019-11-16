@@ -13,3 +13,64 @@
     background: var(--primary-color);
     color: var(--secondary-text);
 }
+
+.flex-container {
+    display: flex;
+}
+
+.item {
+    margin: 0 1rem;
+}
+
+.item:nth-child(1) {
+    flex: 1;
+}
+
+/* HISTORIAL DE ACCESOS */
+.history {
+    display: flex;
+    list-style: none;
+}
+
+.history__item {
+    line-height: 2;
+}
+
+.history__link {
+    margin-right: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: .5s border ease-in;
+}
+
+.history__link:hover {
+    border-bottom: 2px solid var(--primary-color);
+}
+
+/* GRILLA DE CARPETAS */
+.folder__container {
+    padding: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.folder {
+    height: 4rem;
+    width: 15rem;
+    margin: 10px;
+    padding: .5rem;
+    border-radius: 5px;
+    line-height: 2;
+    text-align: center;
+    border: 1px solid var(--divider-color);
+    cursor: pointer;
+}
+
+.folder__header {
+    display: flex;
+    justify-content: center;
+}
+
+.folder__header-icon {
+    margin-right: 1rem;
+}

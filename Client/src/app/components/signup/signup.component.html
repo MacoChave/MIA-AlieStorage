@@ -33,10 +33,9 @@
             </mat-form-field>
             <mat-form-field class="form__group">
                 <mat-label>Género</mat-label>
-                <select matNativeControl required class="form__input" name="input-genre" [(ngModel)]='user.GENERO'>
-                    <option class="form__input" value="m">Masculino</option>
-                    <option class="form__input" value="f">Femenino</option>
-                </select>
+                <mat-select required class="form__input" [(value)]='user.GENERO'>
+                    <mat-option *ngFor="let item of list_genero" class="form__input" [value]="item.value">{{ item.nombre }}</mat-option>
+                </mat-select>
             </mat-form-field>
             <div class="form__group">
                 <input class="form__input" type="file" (change)='change($event)' required>

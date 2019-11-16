@@ -67,18 +67,19 @@ function flatten(disco, particion, content) {
                     texto += element;
             })
             // TODO: SP_NEWARCHIVO
-            console.log(`SP_NEWFILE(cod_archivo, ${padre}, ${nombre}, ${texto}, ${permiso}, ${no_inodo})`)
+            console.log(`SP_NEWFILE(cod_carpeta, ${particion}, ${padre}, ${nombre}, ${texto}, ${permiso}, ${no_inodo})`)
             executor.sp(
                 `BEGIN 
-                    SP_NEWFILE(:cod_archivo, :cod_carpeta, :nombre, :contenido, :permiso, :bloque);
+                    SP_NEWFILE(:cod_carpeta, :cod_particion, :inodo_padre, :nombre, :contenido, :permiso, :no_inodo);
                 END`,
                 {
-                    cod_archivo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }, 
-                    cod_carpeta: padre, 
+                    cod_carpeta: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }, 
+                    cod_particion: particion, 
+                    inodo_padre: padre, 
                     nombre: nombre, 
                     contenido: texto, 
                     permiso: permiso, 
-                    bloque: no_inodo
+                    no_inodo: no_inodo
                 }
             )
         }

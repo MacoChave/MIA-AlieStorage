@@ -13,18 +13,35 @@ export class FilesystemService {
 
   }
 
-  getDisk(id: string) {
-    return this.http.get(`${Uri.DISCO}/${id}`);
+  getDisk(user: number) {
+    return this.http.get(`${Uri.DISCO}/${user}`);
   }
 
-  getFolderContent(id: string) {
+  getParts(disk: number) {
+    return this.http.get(`${Uri.PARTICION}/${disk}`)
+  }
 
+  getRootContent(part: number) {
+    const body = { PARTICION: part }
+    return this.http.post(`${Uri.CARPETA}/root`, body);
+  }
+
+  getFolderContent(part: number, child: number) {
+    const body = {
+      PARTICION: part, 
+      PADRE: child
+    }
+    return this.http.post(`${Uri.CARPETA}/child`, body);
+  }
+
+  getUpTo(part: number, cod_folder: number) {
+    const body = {
+      PARTICION: part, 
+      COD_CARPETA: cod_folder
+    }
+    return this.http.post(`${Uri.CARPETA}/up`, body);
   }
   
-  getFileContent(id: string) {
-
-  }
-
   postFolder() {
 
   }

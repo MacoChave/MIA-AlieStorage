@@ -221,22 +221,23 @@ BEGIN
             ROWNUM = 1;
 
         INSERT INTO CARPETA 
-            (COD_PARTICION, COD_PADRE, NOMBRE, PERMISO, NO_BLOQUE)
+            (COD_PARTICION, COD_PADRE, NOMBRE, PERMISO, NO_BLOQUE, TIPO)
         VALUES 
-            (in_cod_particion, padre, in_nombre, in_permiso, in_bloque);
+            (in_cod_particion, padre, in_nombre, in_permiso, in_bloque, 0);
     ELSE 
         INSERT INTO CARPETA 
-            (COD_PARTICION, NOMBRE, PERMISO, NO_BLOQUE)
+            (COD_PARTICION, NOMBRE, PERMISO, NO_BLOQUE, TIPO)
         VALUES 
-            (in_cod_particion, in_nombre, in_permiso, in_bloque);
+            (in_cod_particion, in_nombre, in_permiso, in_bloque, 0);
     END IF;
 
     in_cod_carpeta := SEQ_CARPETA.CURRVAL;
 END;
 
 create or replace PROCEDURE SP_NEWFILE (
-    in_cod_archivo OUT NUMBER, 
-    in_cod_carpeta IN NUMBER, 
+    in_cod_carpeta OUT NUMBER, 
+    in_cod_particion IN NUMBER, 
+    in_cod_padre IN NUMBER, 
     in_nombre IN VARCHAR2, 
     in_contenido IN VARCHAR2, 
     in_permiso IN NUMBER, 
@@ -247,13 +248,14 @@ BEGIN
     SELECT COD_CARPETA INTO padre 
     FROM CARPETA 
     WHERE 
-        NO_BLOQUE = in_cod_carpeta AND 
+        NO_BLOQUE = in_cod_padre AND 
+        COD_PARTICION = in_cod_particion AND 
         ROWNUM = 1;
 
-    INSERT INTO ARCHIVO 
-        (COD_CARPETA, NOMBRE, CONTENIDO, PERMIOS, NO_BLOQUE)
+    INSERT INTO CARPETA 
+        (cod_particion, cod_padre, nombre, contenido, permiso, no_bloque, tipo)
     VALUES 
-        (padre, in_nombre, in_contenido, in_permiso, in_bloque);
+        (in_cod_particion, padre, in_nombre, in_contenido, in_permiso, in_bloque, 0);
 
-    in_cod_archivo := SEQ_ARCHIVO.CURRVAL;
+    in_cod_carpeta := SEQ_CARPETA.CURRVAL;
 END;
