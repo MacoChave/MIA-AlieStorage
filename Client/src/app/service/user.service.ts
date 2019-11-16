@@ -55,6 +55,14 @@ export class UserService {
     return this.http.put(`${Uri.USUARIO}/`, user);
   }
 
+  updatePass(codigo: number, pass: string) {
+    const data = {
+      COD_USUARIO: codigo, 
+      PASS: pass
+    }
+    return this.http.put(`${Uri.USUARIO}/pass`, data);
+  }
+  
   changeRole(user: User) {
     return this.http.put(`${Uri.USUARIO}/role`, user);
   }

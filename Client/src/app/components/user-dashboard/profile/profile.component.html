@@ -1,0 +1,76 @@
+<div class="grid-container">
+    <div class="item">
+        <h1>Cambia tus datos</h1>
+        <form class="form" (ngSubmit)='update()'>
+            <div class="flex-container">
+                <mat-form-field class="form__group">
+                    <input matInput class="form__input" type="text" placeholder="Nombre" name="input-firstname" id="input-firstname" [(ngModel)]='user.NOMBRE' required/>
+                </mat-form-field>
+                <mat-form-field class="form__group">
+                    <input matInput class="form__input" type="text" placeholder="Apellido" name="input-lastname" id="input-lastname" [(ngModel)]='user.APELLIDO' required/>
+                </mat-form-field>
+            </div>
+            <mat-form-field *ngIf="user.EMAIL === null" class="form__group">
+                <input matInput class="form__input" type="email" placeholder="Email" name="input-email" [(ngModel)]='user.EMAIL' required>
+            </mat-form-field>
+            <mat-form-field class="form__group">
+                <input matInput class="form__input" type="tel" placeholder="Teléfono" name="input-phone" id="input-phone" [(ngModel)]='user.TELEFONO' required/>
+            </mat-form-field>
+            <mat-form-field class="form__group">
+                <textarea matInput class="form__input" placeholder="Dirección" name="input-address" id="input-address" [(ngModel)]='user.DIRECCION'></textarea>
+            </mat-form-field>
+            <mat-form-field *ngIf="user.FECHA_NACIMIENTO === null" class="form__group">
+                <input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" 
+                    (dateInput)="addDate($event)" (dateChange)="addDate($event)">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field *ngIf="user.GENERO === null" class="form__group">
+                <mat-label>Género</mat-label>
+                <mat-select required class="form__input" [(value)]='user.GENERO'>
+                    <mat-option *ngFor="let item of list_genero" class="form__input" [value]="item.value">{{ item.nombre }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div *ngIf="user.FOTOGRAFIA === null" class="form__group">
+                <input class="form__input" type="file" (change)='change($event)' required>
+            </div>
+            <mat-form-field class="form__group">
+                <input matInput class="form__input" type="password" placeholder="Cambia la contraseña" name="input-newPass" id="input-newPass" [(ngModel)]='newPass'/>
+            </mat-form-field>
+            <button mat-button class="btn btn-stroked-primary">Sign up</button>
+        </form>
+    </div>
+    <div class="item">
+        <h1>{{ user.USERNAME }}</h1>
+        <div class="data__container">
+            <div class="data__group">
+                <p class="data__text">Nombre</p>
+                <p class="data__text">{{ user.NOMBRE }}</p>
+            </div>
+            <div class="data__group">
+                <p class="data__text">Apellido</p>
+                <p class="data__text">{{ user.APELLIDO }}</p>
+            </div>
+            <div class="data__group">
+                <p class="data__text">Email</p>
+                <p class="data__text">{{ user.EMAIL }}</p>
+            </div>
+            <div class="data__group">
+                <p class="data__text">Telefono</p>
+                <p class="data__text">{{ user.TELEFONO }}</p>
+            </div>
+            <div class="data__group">
+                <p class="data__text">Direccion</p>
+                <p class="data__text">{{ user.DIRECCION }}</p>
+            </div>
+            <div class="data__group">
+                <p class="data__text">Fecha de nacimiento</p>
+                <p class="data__text">{{ user.FECHA_NACIMIENTO }}</p>
+            </div>
+            <div class="data__group">
+                <p class="data__text">Genero</p>
+                <p class="data__text">{{ user.GENERO }}</p>
+            </div>
+        </div>
+    </div>
+</div>

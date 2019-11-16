@@ -3,11 +3,11 @@
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-        <button mat-menu-item [routerLink]="[{outlets: {user: ['filesystem']}}]" routerLinkActive='active'>
+        <button mat-menu-item [routerLink]="[{outlets: {user: ['profile']}}]" routerLinkActive='active'>
             <mat-icon>account_circle</mat-icon>
             <span>Perfil</span>
         </button>
-        <button mat-menu-item [routerLink]="[{outlets: {user: ['filesystem']}}]" routerLinkActive='active'>
+        <button *ngIf="user.EMAIL != null" mat-menu-item [routerLink]="[{outlets: {user: ['filesystem']}}]" routerLinkActive='active'>
             <mat-icon>cloud</mat-icon>
             <span>Sistema de archivos</span>
         </button>

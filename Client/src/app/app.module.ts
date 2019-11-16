@@ -20,6 +20,7 @@ import { ValidateuserComponent } from './components/validateuser/validateuser.co
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { UserComponent } from './components/user-dashboard/user/user.component';
 import { FilesystemComponent } from './components/user-dashboard/filesystem/filesystem.component';
+import { ProfileComponent } from './components/user-dashboard/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { FilesystemComponent } from './components/user-dashboard/filesystem/file
     SigninComponent, 
     ValidateuserComponent, 
     NotfoundComponent, 
-    UserComponent, FilesystemComponent
+    UserComponent, FilesystemComponent, ProfileComponent
   ],
   imports: [
     BrowserModule,

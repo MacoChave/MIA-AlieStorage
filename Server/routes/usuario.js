@@ -243,31 +243,68 @@ router.post('/check', (req, res) => {
 })
 
 router.put('/', (req, res) => {
-    const { COD_USUARIO, NOMBRE, APELLIDO, PASS, TELEFONO, DIRECCION } = req.body;
+    const { COD_USUARIO, NOMBRE, APELLIDO, EMAIL, TELEFONO, DIRECCION, GENERO, FECHA_NACIMIENTO } = req.body;
 
     executor.sp(
         `BEGIN
             SP_UPDATEUSER(
-                :cod_usuario, :nombre, :apellido :pass, :telefono, :direccion, :out_result
+                :codigo, :nombre, :apellido,
+                :email, :telefono, :direccion,
+                :genero, :nacimiento, :out_result
             );
         END`, 
         {
-            cod_usuario: COD_USUARIO, 
+            codigo: COD_USUARIO, 
             nombre: NOMBRE, 
             apellido: APELLIDO, 
-            pass: PASS, 
+            email: EMAIL, 
             telefono: TELEFONO, 
             direccion: DIRECCION, 
+            genero: GENERO, 
+            nacimiento: FECHA_NACIMIENTO, 
             out_result: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
         }
     )
     .then(result => {
-        console.log(result.outBinds.OUT_RESULT)
+        console.log(result.outBinds.out_result)
         res.json({
             MESSAGE: 'Transaction was complete', 
-            ROWS_AFFECTED: result.outBinds.OUT_RESULT
+            ROWS_AFFECTED: result.outBinds.out_result
         })
     })
+})
+
+router.put('/pass', (req, res) => {
+    const { COD_USUARIO, PASS } = require.body;
+
+    CORRECT = password.paswordValidator(PASS);
+
+    if (CORRECT) {
+        executor.query(
+            `BEGIN 
+                UPDATE USUARIO SET 
+                    PASS = :pass
+                WHERE 
+                    COD_USUARIO = :codigo;
+            END`, 
+            {
+                codigo: COD_USUARIO, 
+                pass: PASS
+            }
+        )
+        .then(result => {
+            res.json({
+                MESSAGE: 'Transaction was complete', 
+                ROWS_AFFECTED: result.rowsAffected
+            })
+        })
+    }
+    else {
+        res.json({
+            MESSAGE: 'Wrong password', 
+            ROWS_AFFECTED: -3
+        })
+    }
 })
 
 router.put('/role', (req, res) => {
@@ -292,6 +329,12 @@ router.put('/role', (req, res) => {
             ROWS_AFFECTED: result.outBinds.OUT_RESULT
         })
     })
+})
+
+router.get('/profile:img', (req, res) => {
+    res.writeHead(200, {'Content-Type': 'image/*'});
+    var rs = fs.createReadStream(`./res/profile/${img}`);
+    rs.pipe(res);
 })
 
 module.exports = router;

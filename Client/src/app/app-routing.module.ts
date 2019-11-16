@@ -7,6 +7,7 @@ import { ValidateuserComponent } from './components/validateuser/validateuser.co
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { UserComponent } from './components/user-dashboard/user/user.component';
 import { FilesystemComponent } from './components/user-dashboard/filesystem/filesystem.component';
+import { ProfileComponent } from './components/user-dashboard/profile/profile.component';
 
 
 const routes: Routes = [
@@ -38,6 +39,11 @@ const routes: Routes = [
       {
         path: 'filesystem', 
         component: FilesystemComponent, 
+        outlet: 'user'
+      }, 
+      {
+        path: 'profile', 
+        component: ProfileComponent, 
         outlet: 'user'
       }
     ]
