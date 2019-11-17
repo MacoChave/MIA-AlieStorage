@@ -35,7 +35,6 @@ router.get('/', (req, res) => {
     })
 });
 
-
 router.post('/root', (req, res) => {
     const { PARTICION } = req.body;
     executor.query(
@@ -107,7 +106,6 @@ router.post('/child', (req, res) => {
     })
 });
 
-
 router.post('/up', (req, res) => {
     const { PARTICION, COD_CARPETA } = req.body;
     executor.query(
@@ -144,5 +142,162 @@ router.post('/up', (req, res) => {
         })
     })
 });
+
+router.post('/folder', (req, res) => {
+    const { COD_PARTICION, COD_PADRE, NOMBRE, PERMISO, NO_BLOQUE } = req.body;
+
+    executor.sp(
+        `BEGIN 
+            SP_NEWFOLDER2(
+                :cod_carpeta, 
+                :cod_particion, 
+                :inodo_padre, 
+                :nombre, 
+                :permiso, 
+                :no_inodo
+            );
+        END;`, 
+        {
+            cod_carpeta: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }, 
+            cod_particion: COD_PARTICION, 
+            cod_padre: COD_PADRE, 
+            nombre: NOMBRE, 
+            permiso: PERMISO, 
+            no_inodo: NO_BLOQUE
+        }
+    )
+    .then(result => {
+        res.json({
+            MESSAGE: 'Transaction complete', 
+            ROWS_AFFECTED: result.outBinds.cod_carpeta
+        })
+    })
+    .catch(err => {
+        res.json({
+            MESSAGE: err, 
+            ROWS_AFFECTED: -3
+        })
+    })
+})
+
+router.post('/file', (req, res) => {
+    const { COD_PARTICION, COD_PADRE, NOMBRE, PERMISO, NO_BLOQUE, CONTENIDO } = req.body;
+
+    executor.sp(
+        `BEGIN 
+            SP_NEWFILE2(
+                :cod_carpeta, 
+                :cod_particion, 
+                :inodo_padre, 
+                :nombre, 
+                :contenido, 
+                :permiso, 
+                :no_inodo
+            );
+        END;`, 
+        {
+            cod_carpeta: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }, 
+            cod_particion: COD_PARTICION, 
+            cod_padre: COD_PADRE, 
+            nombre: NOMBRE, 
+            contenido: CONTENIDO, 
+            permiso: PERMISO, 
+            no_inodo: NO_BLOQUE
+        }
+    )
+    .then(result => {
+        res.json({
+            MESSAGE: 'Transaction complete', 
+            ROWS_AFFECTED: result.outBinds.cod_carpeta
+        })
+    })
+    .catch(err => {
+        res.json({
+            MESSAGE: err, 
+            ROWS_AFFECTED: -3
+        })
+    })
+})
+
+router.delete('/:id', (req, res) => {
+    const id = req.params.id
+    executor.query(
+        `SET SERVEROUTPUT ON;
+        BEGIN
+            SP_DELETEFOLDER(:codigo)
+        END`, 
+        { codigo: id }
+    )
+    .then(result => {
+        res.json({
+            MESSAGE: 'Transaccion completa', 
+            ROWS_AFFECTED: result.resultSet
+        })
+    })
+    .catch(err => {
+        res.json({
+            MESSAGE: err, 
+            ROWS_AFFECTED: -3
+        })
+    })
+})
+
+router.put('/nombre', (req, res) => {
+    const { COD_CARPETA, NOMBRE } = req.body;
+
+    executor.sp(
+        `SET SERVEROUTPUT ON; 
+        BEGIN 
+            SP_UPDATENAMEFOLDER(
+                :codigo, :nombre
+            )
+        END;`, 
+        {
+            codigo: COD_CARPETA, 
+            nombre: NOMBRE
+        }
+    )
+    .then(result => {
+        res.json({
+            MESSAGE: 'Transaccion finalizada', 
+            ROWS_AFFECTED: result.resultSet
+        })
+    })
+    .catch(err => {
+        res.json({
+            MESSAGE: err, 
+            ROWS_AFFECTED: -3
+        })
+    })
+})
+
+router.put('/contenido', (req, res) => {
+    const { COD_CARPETA, CONTENIDO } = req.body;
+
+    executor.sp(
+        `SET SERVEROUTPUT ON; 
+        BEGIN 
+            SP_UPDATECONTENTFILE(
+                :codigo, :contenido
+            )
+        END;`, 
+        {
+            codigo: COD_CARPETA, 
+            contenido: CONTENIDO
+        }
+    )
+    .then(result => {
+        res.json({
+            MESSAGE: 'Transaccion finalizada', 
+            ROWS_AFFECTED: result.resultSet
+        })
+    })
+    .catch(err => {
+        res.json({
+            MESSAGE: err, 
+            ROWS_AFFECTED: -3
+        })
+    })
+})
 
 module.exports = router;

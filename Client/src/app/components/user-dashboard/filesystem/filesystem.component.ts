@@ -64,14 +64,19 @@ export class FilesystemComponent implements OnInit {
   }
 
   getChildren(folder: Folder) {
-    this.history.push(folder);
-    this.fsService.getFolderContent(folder.COD_PARTICION, folder.COD_CARPETA).subscribe(
-      res => {
-        this.folders = <Folder[]>res
-        console.log(this.folders)
-      }, 
-      err => console.error(err)
-    )
+    if (folder.TIPO == 1) {
+      // TODO: OPEN TEXT EDITOR
+    }
+    else {
+      this.history.push(folder);
+      this.fsService.getFolderContent(folder.COD_PARTICION, folder.COD_CARPETA).subscribe(
+        res => {
+          this.folders = <Folder[]>res
+          console.log(this.folders)
+        }, 
+        err => console.error(err)
+      )
+    }
   }
 
   returnTo(folder: Folder) {

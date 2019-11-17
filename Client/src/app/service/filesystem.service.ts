@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Uri } from '../modules/Uri';
+import { Folder } from '../modules/Folder';
 
 @Injectable({
   providedIn: 'root'
@@ -42,27 +43,32 @@ export class FilesystemService {
     return this.http.post(`${Uri.CARPETA}/up`, body);
   }
   
-  postFolder() {
-
+  postFolder(folder: Folder) {
+    return this.http.post(`${Uri.CARPETA}/folder`, folder);
   }
 
-  postFile() {
-
+  postFile(folder: Folder) {
+    return this.http.post(`${Uri.CARPETA}/file`, folder);
   }
 
-  updateFolder() {
-
+  updateName(cod: number, name: string) {
+    const data = {
+      COD_CARPETA: cod, 
+      NOMBRE: name
+    }
+    return this.http.put(`${Uri.CARPETA}/nombre`, data)
   }
 
-  updateFile() {
-
+  updateContent(cod: number, content: string) {
+    const data = {
+      COD_CARPETA: cod, 
+      CONTENIDO: content
+    }
+    return this.http.put(`${Uri.CARPETA}/contenido`, data)
   }
 
-  deleteFolder() {
-
+  deleteFolder(cod: number) {
+    return this.http.delete(`${Uri.CARPETA}/${cod}`)
   }
 
-  deleteFile() {
-
-  }
 }

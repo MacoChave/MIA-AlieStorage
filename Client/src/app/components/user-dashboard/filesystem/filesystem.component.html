@@ -1,6 +1,6 @@
 <mat-sidenav-container class="drawer">
     <mat-sidenav class="drawer__side" mode='side' [(opened)]='opened'>
-        
+        <p>Here is a tree view :D</p>
     </mat-sidenav>
 
     <mat-sidenav-content class="drawer__content">
@@ -65,6 +65,12 @@
             </div>
         </div>
         <ng-template class="folder-container" #emptyContainer>
+            <div class="folder">
+                <div class="folder__header">
+                    <i class="folder__header-icon material-icons">folder_open</i>
+                    <p class="folder__header-title">Sin elementos</p>
+                </div>
+            </div>
         </ng-template>
 
     </mat-sidenav-content>

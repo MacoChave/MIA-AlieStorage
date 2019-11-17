@@ -259,3 +259,49 @@ BEGIN
 
     in_cod_carpeta := SEQ_CARPETA.CURRVAL;
 END;
+
+CREATE OR REPLACE PROCEDURE SP_DELETEFOLDER(
+    in_codigo IN NUMBER
+) IS
+    i NUMBER;
+BEGIN 
+    DELETE CARPETA 
+    WHERE 
+        COD_CARPETA = in_codigo;
+    i := SQL%ROWCOUNT;
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE(i);
+END;
+
+CREATE OR REPLACE PROCEDURE SP_UPDATENAMEFOLDER(
+    in_codigo IN NUMBER, 
+    in_nombre IN VARCHAR2
+) IS 
+    i NUMBER;
+BEGIN 
+    UPDATE CARPETA SET 
+        NOMBRE = in_nombre 
+    WHERE 
+        COD_CARPETA = in_codigo;
+    i := SQL%ROWCOUNT;
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE(i);
+END; 
+
+CREATE OR REPLACE PROCEDURE SP_UPDATECONTENTFILE(
+    in_codigo IN NUMBER, 
+    in_contenido IN VARCHAR2
+) IS 
+    i NUMBER;
+BEGIN 
+    UPDATE CARPETA SET 
+        CONTENIDO = in_contenido 
+    WHERE 
+        COD_CARPETA = in_codigo;
+    i := SQL%ROWCOUNT;
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE(i);
+END; 
