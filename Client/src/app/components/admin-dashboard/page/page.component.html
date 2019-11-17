@@ -1,9 +1,14 @@
-<button class="btn btn-stroked-primary toolbar__button" [routerLink]="['/signin']" mat-stroked-button>Sign in</button>
-
 <mat-card class="card">
     <mat-card-header class="card__header">
+        <h1>Cambiar video</h1>
+        <form class="form" (ngSubmit)='update()'>
+            <div class="form__group">
+                <input class="form__input" type="file" (change)='change($event)' required>
+            </div>
+            <button mat-button class="btn btn__flat__accent">Upload</button>
+        </form>
     </mat-card-header>
-    <video width="100%" [(src)]='info.VIDEO' class="card__source"  autoplay [(title)]='info.NOMBRE'>
+    <video width="100%" [(src)]='info.VIDEO' class="card__source" autoplay controls='false' [(title)]='info.NOMBRE'>
         Sorry, your browser doesn't support HTML5 <code>video</code>, 
         but your can download this video from the 
         <a href="http://localhost:3000/api/info/video" target="_blank">Internet archive</a>
@@ -12,7 +17,6 @@
         <p>{{ info.ESLOGAN }}</p>
     </mat-card-content>
     <mat-card-actions class="card__actions">
-        <button class="btn btn-flat-primary" [routerLink]="['/signin']" mat-flat-button>Get Started</button>
     </mat-card-actions>
 </mat-card>
 
@@ -36,6 +40,7 @@
         </mat-card-content>
     </mat-card>
 </div>
+
 
 <mat-card class="card">
     <mat-card-header class="card__header">

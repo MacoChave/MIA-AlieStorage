@@ -51,8 +51,9 @@ export class SigninComponent implements OnInit {
           if (this.user.TIPO === 'Root') {
             // TODO: GO TO ROOT DASHBOARD
           }
-          else if (this.user.TIPO === 'Admin') {
+          else if (this.user.TIPO === 'Administrador') {
             // TODO: GO TO ADMIN DASHBOARD
+            this.router.navigate(['admin-dashboard']);
           }
           else {
             // TODO: GO TO CLIENTE DASHBOARD

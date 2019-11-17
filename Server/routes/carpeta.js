@@ -156,7 +156,7 @@ router.post('/folder', (req, res) => {
                 :permiso, 
                 :no_inodo
             );
-        END;`, 
+        END`, 
         {
             cod_carpeta: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }, 
             cod_particion: COD_PARTICION, 
@@ -194,7 +194,7 @@ router.post('/file', (req, res) => {
                 :permiso, 
                 :no_inodo
             );
-        END;`, 
+        END`, 
         {
             cod_carpeta: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }, 
             cod_particion: COD_PARTICION, 
@@ -219,22 +219,27 @@ router.post('/file', (req, res) => {
     })
 })
 
-router.delete('/:id', (req, res) => {
-    const id = req.params.id
-    executor.query(
-        `SET SERVEROUTPUT ON;
-        BEGIN
-            SP_DELETEFOLDER(:codigo)
+router.delete('/:codigo', (req, res) => {
+    const { codigo } = req.params;
+    console.log(codigo);
+
+    executor.sp(
+        `BEGIN
+            SP_DELETEFOLDER(:codigo);
         END`, 
-        { codigo: id }
+        {
+            codigo: codigo
+        }
     )
     .then(result => {
+        console.info(result);
         res.json({
             MESSAGE: 'Transaccion completa', 
-            ROWS_AFFECTED: result.resultSet
+            ROWS_AFFECTED: 1
         })
     })
     .catch(err => {
+        console.error(err);
         res.json({
             MESSAGE: err, 
             ROWS_AFFECTED: -3
@@ -250,8 +255,8 @@ router.put('/nombre', (req, res) => {
         BEGIN 
             SP_UPDATENAMEFOLDER(
                 :codigo, :nombre
-            )
-        END;`, 
+            );
+        END`, 
         {
             codigo: COD_CARPETA, 
             nombre: NOMBRE
@@ -279,14 +284,15 @@ router.put('/contenido', (req, res) => {
         BEGIN 
             SP_UPDATECONTENTFILE(
                 :codigo, :contenido
-            )
-        END;`, 
+            );
+        END`, 
         {
             codigo: COD_CARPETA, 
             contenido: CONTENIDO
         }
     )
     .then(result => {
+        console.log(result);
         res.json({
             MESSAGE: 'Transaccion finalizada', 
             ROWS_AFFECTED: result.resultSet

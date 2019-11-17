@@ -1,0 +1,27 @@
+<div class="toolbar__button">
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <!-- <i class="material-design">chat</i> -->
+    <!-- <i class="material-design">save-alt</i> -->
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item [routerLink]="[{outlets: {admin: ['report']}}]" routerLinkActive='active'>
+            <mat-icon>bar_chart</mat-icon>
+            <span>Reportes</span>
+        </button>
+        <button mat-menu-item [routerLink]="[{outlets: {admin: ['page']}}]" routerLinkActive='active'>
+            <mat-icon>settings_applications</mat-icon>
+            <span>Gestión de página</span>
+        </button>
+        <button mat-menu-item [routerLink]="[{outlets: {admin: ['contacts']}}]" routerLinkActive='active'>
+            <mat-icon>contacts</mat-icon>
+            <span>Usuarios</span>
+        </button>
+        <button mat-menu-item (click)='signout()' routerLinkActive='active'>
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Sign out</span>
+        </button>
+    </mat-menu>
+</div>
+
+<router-outlet class="user__dashboard" name='admin'></router-outlet>

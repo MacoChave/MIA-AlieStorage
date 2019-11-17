@@ -6,17 +6,17 @@ const executor = require('../db/exec');
 const fs = require('fs');
 
 const router = new Router();
+
 let storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './res/info')
-    },
-    filename: (req, file, cb) => {
-        // cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-        cb(null, file.originalname + path.extname(file.originalname));
+    destination: (req, file, callback) => {
+        callback(null, './res/info')
+    }, 
+    filename: (req, file, callback) => {
+        callback(null, 'file' + path.extname(file.originalname));
     }
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 /**
  * GET INFO
@@ -56,17 +56,9 @@ router.put('/', (req, res) => {
 /**
  * UPDATE VIDEO
  */
-router.put('/video', upload.single('file'), (req, res) => {
-    const VIDEO = `/info/${req.file.fieldname}`;
-    console.log(VIDEO);
-
-    executor.query(
-        `UPDATE INFO SET
-        VIDEO = :VIDEO`, 
-        [VIDEO]
-    )
-    .then(result => {
-        res.json(result.rows);
+router.post('/video', upload.single('video'), (req, res) => {
+    res.json({
+        MESSAGE: 'Video was uploaded',
     });
 })
 

@@ -22,10 +22,10 @@ export class InfoService {
     return this.http.get(`${Uri.INFO}/logo`);
   }
 
-  postVideo(file: File) {
-    const fd = new FormData();
-    fd.append('video', file, file.name);
-    return this.http.post(`${Uri.INFO}/video`, fd);
+  putVideo(file: File) {
+    const formData = new FormData();
+    formData.append('video', file);
+    return this.http.post(`${Uri.INFO}/video`, formData);
   }
 
   update(info: Info) {

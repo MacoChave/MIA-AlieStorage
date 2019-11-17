@@ -3,6 +3,7 @@ import { User } from 'src/app/modules/User';
 import { UserService } from 'src/app/service/user.service';
 import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { Result } from 'src/app/modules/Result';
 
 @Component({
   selector: 'app-profile',
@@ -13,6 +14,8 @@ export class ProfileComponent implements OnInit {
 
   user: User = {};
   newPass: string = '';
+  resultUser: Result;
+  resultPass: Result;
 
   list_genero = [
     { nombre: 'Masculino', value: 'm' }, 
@@ -33,7 +36,8 @@ export class ProfileComponent implements OnInit {
   update() {
     this.userService.update(this.user).subscribe(
       resUser => {
-        if (resUser.ROWS_AFFECTED > 0) {
+        this.resultUser = <Result>resUser;
+        if (this.resultUser.ROWS_AFFECTED > 0) {
           localStorage.setItem('session', JSON.stringify(this.user));
           this.openSnackBar('El usuario se ha actualizado', 'snackbar--valid')
         }
@@ -41,7 +45,8 @@ export class ProfileComponent implements OnInit {
         if (this.newPass != '') {
           this.userService.updatePass(this.user.COD_USUARIO, this.user.PASS).subscribe(
             resPass => {
-              if (resPass.ROWS_AFFECTED > 0) 
+              this.resultPass = <Result>resPass
+              if (this.resultPass.ROWS_AFFECTED > 0) 
                 this.openSnackBar('La contraseña se actualizó', 'snackbar--valid')
               else  this.openSnackBar('La contraseña no cumple con las reglas', 'snackbar--invalid')
             }

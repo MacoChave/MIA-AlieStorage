@@ -53,14 +53,19 @@
         
         <!-- CONTENT OF CURRENT FOLDER -->
         <div class="folder__container" *ngIf='folders != null && folders.length > 0; else emptyContainer'>
-            <div class="folder" *ngFor='let folder of folders' (click)='getChildren(folder)'>
-                <div class="folder__header">
+            <div class="folder" *ngFor='let folder of folders'>
+                <div class="folder__ico">
                     <i *ngIf='folder.TIPO == 0' class="folder__header-icon material-icons">folder</i>
                     <i *ngIf='folder.TIPO == 1' class="folder__header-icon material-icons">description</i>
-                    <p class="folder__header-title"> {{ folder.NOMBRE }} </p>
                 </div>
-                <div class="folder__footer">
+                <div class="folder__description" (click)='getChildren(folder)'>
+                    <p> {{ folder.NOMBRE }} </p>
                     <p> {{ folder.FECHA_CREACION | date: 'yyyy-MM-dd' }} </p>
+                </div>
+                <div class="folder__actions">
+                    <i class="material-icons" (click)='add(folder)'>add</i>
+                    <i class="material-icons" (click)='edit(folder)'>edit</i>
+                    <i class="material-icons" (click)='delete(folder)'>delete</i>
                 </div>
             </div>
         </div>

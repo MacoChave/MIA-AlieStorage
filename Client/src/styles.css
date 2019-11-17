@@ -73,6 +73,11 @@ h1, h2, h3, h4 {
     color: var(--secondary-text) !important;
 }
 
+.btn__flat__accent {
+    background: var(--accent-color) !important;
+    color: var(--primary-text) !important;
+}
+
 .btn__basic__accent {
     color: var(--accent-color) !important;
 }

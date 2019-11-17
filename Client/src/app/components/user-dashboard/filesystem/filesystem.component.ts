@@ -4,6 +4,8 @@ import { Disk } from 'src/app/modules/Disk';
 import { User } from 'src/app/modules/User';
 import { Partition } from 'src/app/modules/Partition';
 import { Folder } from 'src/app/modules/Folder';
+import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
+import { Result } from 'src/app/modules/Result';
 
 @Component({
   selector: 'app-filesystem',
@@ -28,8 +30,10 @@ export class FilesystemComponent implements OnInit {
     PARTICION: 0, 
     FOLDER: 0
   }
+  result: Result;
 
-  constructor(private fsService: FilesystemService) {}
+  constructor(private fsService: FilesystemService, 
+              private _snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('session'));
@@ -87,4 +91,29 @@ export class FilesystemComponent implements OnInit {
       }
     )
   }
+
+  add(folder: Folder) {
+
+  }
+
+  edit(folder: Folder) {
+  }
+
+  delete(folder: Folder) {
+    this.fsService.deleteFolder(folder.COD_CARPETA).subscribe(
+      res => {
+        this.result = <Result>res;
+        if (this.result.ROWS_AFFECTED == 1) this.openSnackBar(`Se eliminó ${folder.NOMBRE} con éxito`, 'snackbar--valid')
+        else this.openSnackBar(`No eliminó ${folder.NOMBRE}`, 'snackbar--invalid')
+      }
+    )
+  }
+
+  openSnackBar(message: string, snack_class: string) {
+    let config = <MatSnackBarConfig<any>>new MatSnackBarConfig();
+    config.duration = 5000;
+    config.panelClass = ['snackbar', snack_class];
+    this._snackBar.open(message, undefined, config);
+  }
+
 }

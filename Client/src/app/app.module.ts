@@ -21,6 +21,10 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { UserComponent } from './components/user-dashboard/user/user.component';
 import { FilesystemComponent } from './components/user-dashboard/filesystem/filesystem.component';
 import { ProfileComponent } from './components/user-dashboard/profile/profile.component';
+import { AdminComponent } from './components/admin-dashboard/admin/admin.component';
+import { ReportComponent } from './components/admin-dashboard/report/report.component';
+import { PageComponent } from './components/admin-dashboard/page/page.component';
+import { ContactsComponent } from './components/admin-dashboard/contacts/contacts.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,8 @@ import { ProfileComponent } from './components/user-dashboard/profile/profile.co
     SigninComponent, 
     ValidateuserComponent, 
     NotfoundComponent, 
-    UserComponent, FilesystemComponent, ProfileComponent
+    UserComponent, FilesystemComponent, ProfileComponent, 
+    AdminComponent, ReportComponent, PageComponent, ContactsComponent
   ],
   imports: [
     BrowserModule,
