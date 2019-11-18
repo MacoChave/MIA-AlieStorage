@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
     res.json(data);
 });
 
+/* RETURN User */
 router.post('/usuario', (req, res) => {
     const { YEAR } = req.body;
     console.log(YEAR);
@@ -41,6 +42,7 @@ router.post('/usuario', (req, res) => {
     .then(result => res.json(result.rows))
 })
 
+/* RETURN Modified */
 router.post('/mod', (req, res) => {
     const { Y_DATE, Z_DATE, CARPETA } = req.body;
 
@@ -81,6 +83,7 @@ router.post('/mod', (req, res) => {
     .then(result => res.json(result.rows))
 })
 
+/* RETURN Modified */
 router.get('/log', (req, res) => {
     executor.query(
         `SELECT 
@@ -108,6 +111,7 @@ router.get('/log', (req, res) => {
     .then(result => res.json(result.rows))
 })
 
+/* RETURN FolderLog */
 router.post('/carpeta', (req, res) => {
     const { YEAR } = req.body;
     console.log(YEAR);

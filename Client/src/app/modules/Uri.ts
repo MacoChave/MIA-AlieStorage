@@ -12,4 +12,5 @@ export class Uri {
     static CHAT         : string = `${Uri.API_URI}/chat`;
     static DETALLECHAT  : string = `${Uri.API_URI}/detallechat`;
     static SYNC         : string = `${Uri.API_URI}/sync`;
+    static REPORT       : string = `${Uri.API_URI}/reporte`;
 }
