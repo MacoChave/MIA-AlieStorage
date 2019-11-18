@@ -31,8 +31,8 @@ CREATE TABLE Usuario (
     direccion VARCHAR2(200), 
     fotografia VARCHAR2(200),
     genero VARCHAR2(1),
-    fecha_nacimiento TIMESTAMP,
-    fecha_registro TIMESTAMP, 
+    fecha_nacimiento DATE,
+    fecha_registro DATE, 
     fecha_validacion TIMESTAMP, 
     estado VARCHAR2(1), 
     cod_tipo INT
@@ -67,7 +67,7 @@ END;
 CREATE TABLE Chat (
     cod_chat INT,
     cod_cliente INT,
-    fecha TIMESTAMP
+    fecha DATE
 );
 ALTER TABLE Chat 
 ADD CONSTRAINT PK_CHAT PRIMARY KEY (cod_chat);
@@ -161,8 +161,11 @@ CREATE TABLE Carpeta (
     cod_particion INT, 
     cod_padre INT, 
     nombre VARCHAR2(15), 
+    contenido VARCHAR2(800), 
     permiso INT, 
-    no_bloque INT 
+    no_bloque INT, 
+    fecha_creacion DATE, 
+    tipo INT
 );
 ALTER TABLE Carpeta 
 ADD CONSTRAINT PK_CARPETA PRIMARY KEY (cod_carpeta);
@@ -182,31 +185,6 @@ BEGIN
     FROM dual;
 END;
 
--- TABLA ARCHIVO
-CREATE TABLE Archivo (
-    cod_archivo INT, 
-    cod_carpeta INT, 
-    nombre VARCHAR2(15), 
-    contenido VARCHAR2(800), 
-    permios INT, 
-    no_bloque INT 
-);
-ALTER TABLE Archivo 
-ADD CONSTRAINT PK_ARCHIVO PRIMARY KEY (cod_archivo);
-ALTER TABLE Archivo 
-ADD CONSTRAINT FK_ARCHIVOCARPETA FOREIGN KEY (cod_carpeta) REFERENCES Carpeta(cod_carpeta)
-                ON DELETE CASCADE;
-
-CREATE SEQUENCE SEQ_ARCHIVO;
-CREATE TRIGGER TRG_PKARCHIVO 
-    BEFORE INSERT ON Archivo
-    FOR EACH ROW 
-BEGIN 
-    SELECT SEQ_ARCHIVO.NEXTVAL 
-    INTO :new.cod_archivo
-    FROM dual;
-END;
-
 -- TABLA JOURNAL
 CREATE TABLE Journal (
     cod_journal INT, 
@@ -215,11 +193,8 @@ CREATE TABLE Journal (
     string1 VARCHAR2(200), 
     string2 VARCHAR2(200), 
     string3 VARCHAR2(200), 
-    date_writter TIMESTAMP,
-    permission VARCHAR2(3), 
-    owner_action VARCHAR2(15), 
-    size_journal INT, 
-    estado VARCHAR2(30) 
+    date_writter DATE,
+    permission VARCHAR2(3)
 );
 ALTER TABLE Journal 
 ADD CONSTRAINT PK_JOURNAL PRIMARY KEY (cod_journal);
@@ -249,15 +224,6 @@ ALTER TABLE DetalleDisco
 ADD CONSTRAINT FK_DETALLEDISCO FOREIGN KEY (cod_disco) REFERENCES DiscoVirtual(cod_disco);
 ALTER TABLE DetalleDisco 
 ADD CONSTRAINT FK_DETALLEUSUARIO FOREIGN KEY (cod_usuario) REFERENCES Usuario(cod_usuario);
-
-/* *****************************************************
- * LOG
- * *****************************************************/
--- TABLA LOG 
-CREATE TABLE Bitacora (
-    cod_usuario INT, 
-    cod_journal INT 
-);
 
 -- TABLA INFORMACION
 CREATE TABLE Info (

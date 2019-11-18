@@ -34,6 +34,7 @@ export class UserService {
       PASS: user.PASS, 
       GENPASS: pass
     }
+
     return this.http.post(`${Uri.USUARIO}/validate`, data);
   }
 
