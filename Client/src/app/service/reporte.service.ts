@@ -27,7 +27,7 @@ export class ReporteService {
     return this.http.get(`${Uri.REPORT}/log`);
   }
 
-  getJournalFolderByDate(year: string) {
+  getCountFolderByUser(year: string) {
     const data = { YEAR: year }
     return this.http.post(`${Uri.REPORT}/carpeta`, data);
   }

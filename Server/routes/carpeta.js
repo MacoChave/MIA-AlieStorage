@@ -22,11 +22,11 @@ router.get('/', (req, res) => {
             PARTICION P 
         WHERE 
             c.cod_particion = p.cod_particion 
-        ORDER BY C.TIPO AS`, 
+        ORDER BY C.TIPO ASC`, 
         {}
     )
     .then(result => {
-        res.json(result)
+        res.json(result.rows)
     })
     .catch(err => {
         res.json({

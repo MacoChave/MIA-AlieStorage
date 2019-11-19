@@ -128,3 +128,7 @@ h1, h2, h3, h4 {
     font-size: 2em;
     text-align: center;
 }
+
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+    background: var(--accent-color);
+  } 

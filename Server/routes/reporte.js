@@ -117,7 +117,8 @@ router.post('/carpeta', (req, res) => {
     console.log(YEAR);
     executor.query(
         `SELECT 
-            U.COD_USUARIO COD_USUARIO, 
+            U.USERNAME, 
+            DD.COD_USUARIO, 
             U.FECHA_REGISTRO FECHA_REGISTRO, 
             C.COD_DISCO COD_DISCO,
             P.COD_PARTICION COD_PARTICION,
@@ -136,7 +137,7 @@ router.post('/carpeta', (req, res) => {
             P.COD_PARTICION = C.COD_PARTICION AND 
             TRUNC(U.FECHA_REGISTRO) = :year 
         group by 
-            U.COD_USUARIO, U.FECHA_REGISTRO, C.COD_DISCO, P.COD_PARTICION, P.NOMBRE`, 
+            U.USERNAME, DD.COD_USUARIO, U.FECHA_REGISTRO, C.COD_DISCO, P.COD_PARTICION, P.NOMBRE`, 
         { year: YEAR }
     )
     .then(result => res.json(result.rows))

@@ -50,7 +50,7 @@ export class SignupComponent implements OnInit {
   }
 
   addDate(event: MatDatepickerInputEvent<Date>) {
-    this.user.FECHA_NACIMIENTO = `${event.value.getDay()}-${event.value.getMonth()}-${event.value.getFullYear()}`;
+    this.user.FECHA_NACIMIENTO = `${event.value.getDate()}-${event.value.getMonth() + 1}-${event.value.getFullYear()}`;
   }
 
   upload() {

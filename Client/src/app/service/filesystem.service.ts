@@ -11,7 +11,7 @@ export class FilesystemService {
   constructor(private http: HttpClient) { }
 
   getDisks() {
-
+    return this.http.get(`${Uri.CARPETA}`);
   }
 
   getDisk(user: number) {

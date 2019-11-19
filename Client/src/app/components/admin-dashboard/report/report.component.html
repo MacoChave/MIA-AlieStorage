@@ -1,1 +1,171 @@
-<p>report works!</p>
+<mat-tab-group>
+    <mat-tab label="Usuarios por año nacido">
+        <div class="report__container">
+            <div class="report__item">
+                <mat-form-field>
+                    <input matInput [matDatepicker]='date_rep1' placeholder="Escoge el año pivote"
+                    (dateInput)='addDate($event, 1)' (dateChange)='addDate($event, 1)'>
+                    <mat-datepicker-toggle matSuffix [for]='date_rep1'></mat-datepicker-toggle>
+                    <mat-datepicker #date_rep1></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="report__item">
+                <button mat-button class="btn btn__basic__accent" (click)='showReport(1)'>
+                    <mat-icon>report</mat-icon>
+                </button>
+                <button mat-button class="btn btn__basic__accent" (click)='exportReport(1)'>
+                    <mat-icon>save</mat-icon>
+                </button>
+            </div>
+            <div class="report__item" id="report_1" #content1>
+            <h3 class="title">Listado de todos los usuarios nacidos de <b>x</b> año en adelante</h3>
+                <table border="0" class="table__report">
+                    <tr class="table__row">
+                        <th class="table__header">APELLIDO</th>
+                        <th class="table__header">DIRECCION</th>
+                        <th class="table__header">EMAIL</th>
+                        <th class="table__header">FECHA DE NACIMIENTO</th>
+                        <th class="table__header">FECHA DE REGISTRO</th>
+                        <th class="table__header">GENERO</th>
+                        <th class="table__header">NOMBRE</th>
+                        <th class="table__header">TELEFONO</th>
+                        <th class="table__header">USERNAME</th>
+                    </tr>
+                    <tr class="table__row" *ngFor='let item of userReport'>
+                        <td class="table__column">{{ item.APELLIDO }}</td>
+                        <td class="table__column">{{ item.DIRECCION }}</td>
+                        <td class="table__column">{{ item.EMAIL }}</td>
+                        <td class="table__column">{{ item.FECHA_NACIMIENTO | date:'dd/MM/yyyy' }}</td>
+                        <td class="table__column">{{ item.FECHA_REGISTRO | date:'dd/MM/yyyy' }}</td>
+                        <td class="table__column">{{ item.GENERO }}</td>
+                        <td class="table__column">{{ item.NOMBRE }}</td>
+                        <td class="table__column">{{ item.TELEFONO }}</td>
+                        <td class="table__column">{{ item.USERNAME }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Modificacion de carpeta">
+        <div class="report__container">
+            <div class="report__item">
+                <mat-form-field>
+                    <input matInput [matDatepicker]='date_x_rep2' placeholder="Escoge el año pivote"
+                        (dateInput)='addDate($event, 2)' (dateChange)='addDate($event, 2)'>
+                    <mat-datepicker-toggle matSuffix [for]='date_x_rep2'></mat-datepicker-toggle>
+                    <mat-datepicker #date_x_rep2></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput [matDatepicker]='date_y_rep2' placeholder="Escoge el año pivote"
+                        (dateInput)='addDate($event, 3)' (dateChange)='addDate($event, 3)'>
+                    <mat-datepicker-toggle matSuffix [for]='date_y_rep2'></mat-datepicker-toggle>
+                    <mat-datepicker #date_y_rep2></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Carpeta a evaluar</mat-label>
+                    <mat-select [(value)]='cod_folder'>
+                        <mat-option *ngFor='let item of folders' [value]='item.NOMBRE'>
+                            {{ item.NOMBRE }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="report__item">
+                <button mat-button class="btn btn__basic__accent" (click)='showReport(2)'>
+                    <mat-icon>report</mat-icon>
+                </button>
+                <button mat-button class="btn btn__basic__accent" (click)='exportReport(2)'>
+                    <mat-icon>save</mat-icon>
+                </button>
+            </div>
+            <div class="report__item" id="report_2" #content2>
+                <h3 class="title">Listado de clientes que han realizado una modificacion en <b>x</b> carpeta entre <b>x</b> a <b>y</b> año</h3>
+                <table border="0" class="table__report">
+                    <tr class="table__row">
+                        <th class="table__header">USUARIO</th>
+                        <th class="table__header">DISCO</th>
+                        <th class="table__header">PARTICION</th>
+                        <th class="table__header">CARPETA</th>
+                        <th class="table__header">FECHA</th>
+                    </tr>
+                    <tr class="table__row" *ngFor='let item of modReport'>
+                        <td class="table__column">{{ item.USUARIO }}</td>
+                        <td class="table__column">{{ item.DISCO }}</td>
+                        <td class="table__column">{{ item.PARTICION }}</td>
+                        <td class="table__column">{{ item.CARPETA }}</td>
+                        <td class="table__column">{{ item.DATE_WRITTER | date:'dd/MM/yyyy' }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Historial de cambios">
+        <div class="report__container">
+            <div class="report__item"></div>
+            <div class="report__item">
+                <button mat-button class="btn btn__basic__accent" (click)='showReport(3)'>
+                    <mat-icon>report</mat-icon>
+                </button>
+                <button mat-button class="btn btn__basic__accent" (click)='exportReport(3)'>
+                    <mat-icon>save</mat-icon>
+                </button>
+            </div>
+            <div class="report__item" id="report_3" #content3>
+                <h3 class="title">Bitacora de cambios</h3>
+                <table border="0" class="table__report">
+                    <tr class="table__row">
+                        <th class="table__header">USUARIO</th>
+                        <th class="table__header">DISCO</th>
+                        <th class="table__header">PARTICION</th>
+                        <th class="table__header">CARPETA</th>
+                        <th class="table__header">FECHA</th>
+                    </tr>
+                    <tr class="table__row" *ngFor='let item of modReport'>
+                        <td class="table__column">{{ item.USUARIO }}</td>
+                        <td class="table__column">{{ item.DISCO }}</td>
+                        <td class="table__column">{{ item.PARTICION }}</td>
+                        <td class="table__column">{{ item.CARPETA }}</td>
+                        <td class="table__column">{{ item.DATE_WRITTER | date:'dd/MM/yyyy' }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Carpetas de usuarios">
+        <div class="report__container">
+            <div class="report__item">
+                <mat-form-field>
+                    <input matInput [matDatepicker]='date_rep3' placeholder="Escoge el año pivote"
+                        (dateInput)='addDate($event, 4)' (dateChange)='addDate($event, 4)'>
+                    <mat-datepicker-toggle matSuffix [for]='date_rep3'></mat-datepicker-toggle>
+                    <mat-datepicker #date_rep3></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="report__item">
+                <button mat-button (click)='showReport(4)' class="btn btn__basic__accent">
+                    <mat-icon>report</mat-icon>
+                </button>
+                <button mat-button (click)='exportReport(4)' class="btn btn__basic__accent">
+                    <mat-icon>save</mat-icon>
+                </button>
+            </div>
+            <div class="report__item" id="report_4" #content4>
+                <h3 class="title">Listado de clientes registrados en una <b>x</b> fecha y el número de carpetas y archivos a los que tiene acceso</h3>
+                <table border="0" class="table__report">
+                    <tr class="table__row">
+                        <th class="table__header">USERNAME</th>
+                        <th class="table__header">PARTICION</th>
+                        <th class="table__header">FECHA_REGISTRO</th>
+                        <th class="table__header">NO CARPETA</th>
+                    </tr>
+                    <tr class="table__row" *ngFor='let item of modReport'>
+                        <td class="table__column">{{ item.USERNAME }}</td>
+                        <td class="table__column">{{ item.PARTICION }}</td>
+                        <td class="table__column">{{ item.FECHA_REGISTRO | date:'dd/MM/yyyy' }}</td>
+                        <td class="table__column">{{ item.CARPETAS }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>
