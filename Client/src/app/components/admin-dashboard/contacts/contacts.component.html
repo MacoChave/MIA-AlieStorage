@@ -1,1 +1,22 @@
-<p>contacts works!</p>
+<div class="user__container" *ngIf='users != null && users.length > 0; else emptyContainer'>
+    <div class="user" *ngFor='let user of users'>
+        <div class="user__description">
+            <p><span>NOMBRE:</span> {{ user.NOMBRE }} </p>
+            <p><span>TIPO:</span> {{ user.TIPO }} </p>
+            <p><span>USERNAME:</span> {{ user.USERNAME }} </p>
+        </div>
+        <div class="user__actions">
+            <i class="material-icons">add</i>
+            <i class="material-icons">edit</i>
+            <i class="material-icons">delete</i>
+        </div>
+    </div>
+</div>
+<ng-template class="user__container" #emptyContainer>
+    <div class="user">
+        <div class="user__actions">
+            <i class="user__header-icon material-icons">folder_open</i>
+            <p class="user__header-title">Sin elementos</p>
+        </div>
+    </div>
+</ng-template>

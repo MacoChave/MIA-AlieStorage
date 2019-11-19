@@ -1,0 +1,45 @@
+
+/* GRILLA DE CARPETAS */
+.user__container {
+    padding: 3rem;
+}
+
+.user {
+    height: 3rem;
+    margin: .5rem;
+    padding: .5rem;
+    border-radius: 5px;
+    line-height: 2;
+    text-align: center;
+    border: 2px solid var(--divider-color);
+    display: flex;
+    justify-content: space-between;
+    color: var(--primary-color);
+}
+
+.user__ico {
+    margin-right: 1rem;
+}
+
+.user__description {
+    flex: 2;
+    text-align: start;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-around;
+}
+
+.user__description p:last-child {
+    font-size: .7rem;
+}
+
+.user__actions i {
+    cursor: pointer;
+    margin-right: .5rem;
+    color: var(--accent-color);
+    z-index: 100;
+}
+
+.user__actions i:hover {
+    opacity: .7;
+}
