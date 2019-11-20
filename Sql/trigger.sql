@@ -1,30 +1,24 @@
-CREATE OR REPLACE TRIGGER TRG_NEWFOLDER
+create or replace TRIGGER TRG_DELETEFOLDER
+    AFTER DELETE ON CARPETA 
+    FOR EACH ROW 
+BEGIN 
+    INSERT INTO JOURNAL
+        (cod_particion, string1, permission, operation)
+    VALUES 
+        (:OLD.COD_PARTICION, :OLD.NOMBRE, :OLD.PERMISO, 3);
+END;
+
+create or replace TRIGGER TRG_NEWFOLDER
     AFTER INSERT ON CARPETA 
     FOR EACH ROW 
 BEGIN 
     INSERT INTO JOURNAL
-        (cod_particion, string1, permission)
+        (cod_particion, string1, permission, operation)
     VALUES 
-        (:NEW.COD_PARTICION, :NEW.NOMBRE, :NEW.PERMISO)
+        (:NEW.COD_PARTICION, :NEW.NOMBRE, :NEW.PERMISO, 1);
 END;
 
-CREATE OR REPLACE TRIGGER TRG_NEWFILE
-    AFTER INSERT ON ARCHIVO 
-    FOR EACH ROW 
-DECLARE 
-    particion NUMBER;
-BEGIN 
-    SELECT cod_particion INTO particion 
-    FROM CARPETA 
-    WHERE cod_carpeta = :NEW.COD_CARPETA;
-    
-    INSERT INTO JOURNAL
-        (cod_particion, string1, permission)
-    VALUES 
-        (particion, :NEW.NOMBRE, :NEW.PERMIOS);
-END;
-
-CREATE OR REPLACE TRIGGER TRG_NEWFS 
+create or replace TRIGGER TRG_NEWFS 
     AFTER INSERT ON PARTICION 
     FOR EACH ROW 
 DECLARE 
@@ -33,7 +27,6 @@ BEGIN
     SP_NEWFOLDER(cod_carpeta, :NEW.COD_PARTICION, 0, '/', 777, 0);
 END;
 
--- CORRELATIVO DE INODO PARA UNA PARTICION
 create or replace TRIGGER TRG_NOINODO 
     BEFORE INSERT ON CARPETA 
     FOR EACH ROW
@@ -46,4 +39,14 @@ BEGIN
         COD_PARTICION = :NEW.COD_PARTICION
     ORDER BY 
         NO_BLOQUE DESC;
+END;
+
+create or replace TRIGGER TRG_UPDATEFOLDER
+    AFTER UPDATE ON CARPETA 
+    FOR EACH ROW 
+BEGIN 
+    INSERT INTO JOURNAL
+        (cod_particion, string1, permission, operation)
+    VALUES 
+        (:NEW.COD_PARTICION, :NEW.NOMBRE, :NEW.PERMISO, 2);
 END;

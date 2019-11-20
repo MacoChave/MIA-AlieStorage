@@ -22,18 +22,18 @@ END;
 -- TABLA USUARIO
 CREATE TABLE Usuario (
     cod_usuario INT,
-    nombre VARCHAR2(15),
-    apellido VARCHAR2(15),
+    nombre VARCHAR2(30),
+    apellido VARCHAR2(30),
     username VARCHAR2(15), 
     pass VARCHAR2(15),
-    email VARCHAR2(30),
-    telefono INT,
+    email VARCHAR2(50),
+    telefono NUMBER(8),
     direccion VARCHAR2(200), 
     fotografia VARCHAR2(200),
     genero VARCHAR2(1),
-    fecha_nacimiento DATE,
-    fecha_registro DATE, 
-    fecha_validacion TIMESTAMP, 
+    fecha_nacimiento TIMESTAMP(2),
+    fecha_registro TIMESTAMP(2), 
+    fecha_validacion TIMESTAMP(2), 
     estado VARCHAR2(1), 
     cod_tipo INT
 );
@@ -105,7 +105,7 @@ ADD CONSTRAINT FK_CHATUSUARIO FOREIGN KEY (cod_root) REFERENCES Usuario(cod_usua
 --  TABLA DISCO
 CREATE TABLE DiscoVirtual (
     cod_disco INT, 
-    nombre VARCHAR2(30), 
+    nombre VARCHAR2(100), 
     size_disco INT, 
     unit VARCHAR2(1) 
 );
@@ -164,7 +164,7 @@ CREATE TABLE Carpeta (
     contenido VARCHAR2(800), 
     permiso INT, 
     no_bloque INT, 
-    fecha_creacion DATE, 
+    fecha_creacion TIMESTAMP, 
     tipo INT
 );
 ALTER TABLE Carpeta 
@@ -194,7 +194,10 @@ CREATE TABLE Journal (
     string2 VARCHAR2(200), 
     string3 VARCHAR2(200), 
     date_writter DATE,
-    permission VARCHAR2(3)
+    permission VARCHAR2(3), 
+    owner_action VARCHAR2(15), 
+    size_journal INT, 
+    estado VARCHAR2(30)
 );
 ALTER TABLE Journal 
 ADD CONSTRAINT PK_JOURNAL PRIMARY KEY (cod_journal);
