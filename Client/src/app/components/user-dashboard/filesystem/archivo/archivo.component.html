@@ -1,0 +1,22 @@
+<div class="folder__container">
+    <div class="folder__title">
+        <mat-form-field>
+            <input matInput [(ngModel)]='actual.NOMBRE' placeholder="Nombre del archivo" name="name_file" type="text" required>
+        </mat-form-field>
+        <mat-form-field *ngIf='data.CREATE'>
+            <mat-label>Tipo de archivo</mat-label>
+            <mat-select [(value)]='actual.TIPO'>
+                <mat-option [value]='1'>Archivo</mat-option>
+                <mat-option [value]='0'>Carpeta</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="folder__content" *ngIf='(actual.TIPO === 1)'>
+        <mat-form-field>
+            <textarea matInput [(ngModel)]='actual.CONTENIDO' name="content_file" id="content_file" placeholder="Contenido del archivo"></textarea>
+        </mat-form-field>
+    </div>
+    <div class="folder__action">
+        <button mat-button class="btn btn-flat-primary" (click)="saveFolder()">Save</button>
+    </div>
+</div>

@@ -255,7 +255,7 @@ BEGIN
     INSERT INTO CARPETA 
         (cod_particion, cod_padre, nombre, contenido, permiso, no_bloque, tipo)
     VALUES 
-        (in_cod_particion, padre, in_nombre, in_contenido, in_permiso, in_bloque, 0);
+        (in_cod_particion, padre, in_nombre, in_contenido, in_permiso, in_bloque, 1);
 
     in_cod_carpeta := SEQ_CARPETA.CURRVAL;
 END;
@@ -305,3 +305,53 @@ BEGIN
 
     DBMS_OUTPUT.PUT_LINE(i);
 END; 
+
+CREATE OR REPLACE PROCEDURE SP_MOVEFOLDER(
+    in_cod_carpeta IN NUMBER, 
+    in_nombre IN VARCHAR2, 
+    in_cod_padre IN NUMBER
+) IS 
+    counting NUMBER;
+BEGIN 
+    SELECT COD_CARPETA INTO counting 
+    FROM CARPETA 
+    WHERE NOMBRE LIKE in_nombre;
+    
+    IF counting = 0 THEN
+        UPDATE CARPETA SET 
+            COD_PADRE = in_cod_padre 
+        WHERE 
+            COD_CARPETA = in_cod_carpeta;
+        
+        DBMS_OUTPUT.PUT_LINE(SQL%ROWCOUNT);
+    ELSE 
+        DBMS_OUTPUT.PUT_LINE(0);
+    END IF;
+END;
+
+CREATE OR REPLACE PROCEDURE SP_MOVEFOLDER(
+    in_cod_carpeta IN NUMBER, 
+    in_nombre IN VARCHAR2, 
+    in_cod_padre IN NUMBER
+) IS 
+    counting NUMBER;
+BEGIN 
+    SELECT COUNT(COD_CARPETA) INTO counting 
+    FROM CARPETA 
+    WHERE 
+        COD_PADRE = in_cod_padre AND 
+        NOMBRE LIKE in_nombre;
+    
+    IF counting = 0 THEN
+        UPDATE CARPETA SET 
+            COD_PADRE = in_cod_padre 
+        WHERE 
+            COD_CARPETA = in_cod_carpeta;
+        
+        DBMS_OUTPUT.put_line(SQL%ROWCOUNT);
+    ELSE 
+        DBMS_OUTPUT.PUT_LINE(-1);
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE(-2);
+END;

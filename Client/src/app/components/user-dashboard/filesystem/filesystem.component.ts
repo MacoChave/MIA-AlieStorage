@@ -6,6 +6,9 @@ import { Partition } from 'src/app/modules/Partition';
 import { Folder } from 'src/app/modules/Folder';
 import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
 import { Result } from 'src/app/modules/Result';
+import { MatDialog } from '@angular/material/dialog';
+import { ArchivoComponent } from './archivo/archivo.component';
+import { MoveComponent } from './move/move.component';
 
 @Component({
   selector: 'app-filesystem',
@@ -33,7 +36,8 @@ export class FilesystemComponent implements OnInit {
   result: Result;
 
   constructor(private fsService: FilesystemService, 
-              private _snackBar: MatSnackBar) {}
+              private _snackBar: MatSnackBar, 
+              private dialog: MatDialog) {}
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('session'));
@@ -84,19 +88,55 @@ export class FilesystemComponent implements OnInit {
   }
 
   returnTo(folder: Folder) {
-    this.fsService.getUpTo(folder.COD_PARTICION, folder.COD_CARPETA).subscribe(
+    this.fsService.getFolderContent(folder.COD_PARTICION, folder.COD_CARPETA).subscribe(
       res => {
         this.folders = <Folder[]>res
-        this.history = this.history.slice(0, this.history.indexOf(folder))
+        this.history = this.history.slice(0, this.history.indexOf(folder) + 1)
       }
     )
   }
 
   add(folder: Folder) {
-
+    const dialogRef = this.dialog.open(
+      ArchivoComponent, 
+      {
+        data: {
+          FOLDER: folder, 
+          CREATE: true
+        }, 
+        width: '60vw', 
+        height: '80vh'
+      }
+    )
   }
 
   edit(folder: Folder) {
+    const dialogRef = this.dialog.open(
+      ArchivoComponent, 
+      {
+        data: {
+          FOLDER: folder, 
+          CREATE: false
+        }, 
+        width: '60vw', 
+        height: '80vh'
+      }
+    )
+  }
+
+  copy(folder: Folder) {
+  }
+
+  move(folder: Folder) {
+    console.log('SE DEBERÍA ABRIR LA VENTANA POP UP MOVER');
+    // const dialogRef = this.dialog.open(
+    //   MoveComponent, 
+    //   {
+    //     data: folder, 
+    //     width: '60vw', 
+    //     height: '80vh'
+    //   }
+    // )
   }
 
   delete(folder: Folder) {

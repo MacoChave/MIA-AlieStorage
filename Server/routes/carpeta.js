@@ -151,7 +151,7 @@ router.post('/folder', (req, res) => {
             SP_NEWFOLDER2(
                 :cod_carpeta, 
                 :cod_particion, 
-                :inodo_padre, 
+                :cod_padre, 
                 :nombre, 
                 :permiso, 
                 :no_inodo
@@ -188,7 +188,7 @@ router.post('/file', (req, res) => {
             SP_NEWFILE2(
                 :cod_carpeta, 
                 :cod_particion, 
-                :inodo_padre, 
+                :cod_padre, 
                 :nombre, 
                 :contenido, 
                 :permiso, 
@@ -249,6 +249,8 @@ router.delete('/:codigo', (req, res) => {
 
 router.put('/nombre', (req, res) => {
     const { COD_CARPETA, NOMBRE } = req.body;
+    console.log(COD_CARPETA)
+    console.log(NOMBRE)
 
     executor.sp(
         `SET SERVEROUTPUT ON; 
@@ -265,7 +267,7 @@ router.put('/nombre', (req, res) => {
     .then(result => {
         res.json({
             MESSAGE: 'Transaccion finalizada', 
-            ROWS_AFFECTED: result.resultSet
+            RESULT: result
         })
     })
     .catch(err => {
@@ -295,7 +297,7 @@ router.put('/contenido', (req, res) => {
         console.log(result);
         res.json({
             MESSAGE: 'Transaccion finalizada', 
-            ROWS_AFFECTED: result.resultSet
+            RESULT: result
         })
     })
     .catch(err => {
@@ -303,6 +305,28 @@ router.put('/contenido', (req, res) => {
             MESSAGE: err, 
             ROWS_AFFECTED: -3
         })
+    })
+})
+
+router.put('/move', (req, res) => {
+    const { COD_CARPETA, NOMBRE, COD_PADRE } = req.body;
+
+    executor.sp(
+        `SET SERVEROUTPUT ON;
+        BEGIN
+            SP_MOVEFOLDER(:cod_carpeta, :nombre, :cod_padre);
+        END`, 
+        {
+            cod_carpeta: COD_CARPETA, 
+            nombre: NOMBRE, 
+            cod_padre: COD_PADRE
+        }
+    )
+    .then(result => {
+        MESSAGE: 'TRANSACCIÓN FINALIZADA CON EXITO'
+    })
+    .catch(err => {
+        MESSAGE: 'TRANSACCIÓN FINALIZÓ CON ERROR'
     })
 })
 

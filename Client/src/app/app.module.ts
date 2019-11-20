@@ -25,6 +25,8 @@ import { AdminComponent } from './components/admin-dashboard/admin/admin.compone
 import { ReportComponent } from './components/admin-dashboard/report/report.component';
 import { PageComponent } from './components/admin-dashboard/page/page.component';
 import { ContactsComponent } from './components/admin-dashboard/contacts/contacts.component';
+import { ArchivoComponent } from './components/user-dashboard/filesystem/archivo/archivo.component';
+import { MoveComponent } from './components/user-dashboard/filesystem/move/move.component';
 
 @NgModule({
   declarations: [
@@ -34,8 +36,8 @@ import { ContactsComponent } from './components/admin-dashboard/contacts/contact
     SigninComponent, 
     ValidateuserComponent, 
     NotfoundComponent, 
-    UserComponent, FilesystemComponent, ProfileComponent, 
-    AdminComponent, ReportComponent, PageComponent, ContactsComponent
+    UserComponent, FilesystemComponent, ProfileComponent, ArchivoComponent, 
+    AdminComponent, ReportComponent, PageComponent, ContactsComponent, MoveComponent
   ],
   imports: [
     BrowserModule,
@@ -53,6 +55,8 @@ import { ContactsComponent } from './components/admin-dashboard/contacts/contact
   ],
   bootstrap: [AppComponent], 
   entryComponents: [
+    ArchivoComponent, 
+    MoveComponent
   ]
 })
 export class AppModule { }
