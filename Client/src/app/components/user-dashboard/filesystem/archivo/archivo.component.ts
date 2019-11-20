@@ -72,25 +72,25 @@ export class ArchivoComponent implements OnInit {
           MESSAGE: 'EDIT FILE', 
           DATA: this.actual
         })
-        // this.filesystemService.updateName(this.actual.COD_CARPETA, this.actual.NOMBRE).subscribe(
-        //   res => {
-        //     console.log(res)
-        //     this.filesystemService.updateContent(this.actual.COD_CARPETA, this.actual.CONTENIDO).subscribe(
-        //       resContent => console.log(resContent)
-        //     )
-        //   }, 
-        //   err => console.error(err)
-        // )
+        this.filesystemService.updateName(this.actual.COD_CARPETA, this.actual.NOMBRE).subscribe(
+          res => {
+            console.log(res)
+            this.filesystemService.updateContent(this.actual.COD_CARPETA, this.actual.CONTENIDO).subscribe(
+              resContent => console.log(resContent)
+            )
+          }, 
+          err => console.error(err)
+        )
       }
       else {
         console.log({
           MESSAGE: 'EDIT FOLDER', 
           DATA: this.actual
         })
-        // this.filesystemService.updateName(this.actual.COD_CARPETA, this.actual.NOMBRE).subscribe(
-        //   res => console.log(res), 
-        //   err => console.error(err)
-        // )
+        this.filesystemService.updateName(this.actual.COD_CARPETA, this.actual.NOMBRE).subscribe(
+          res => console.log(res), 
+          err => console.error(err)
+        )
       }
     }
 

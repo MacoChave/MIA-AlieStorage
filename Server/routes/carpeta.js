@@ -253,8 +253,7 @@ router.put('/nombre', (req, res) => {
     console.log(NOMBRE)
 
     executor.sp(
-        `SET SERVEROUTPUT ON; 
-        BEGIN 
+        `BEGIN 
             SP_UPDATENAMEFOLDER(
                 :codigo, :nombre
             );
@@ -266,8 +265,7 @@ router.put('/nombre', (req, res) => {
     )
     .then(result => {
         res.json({
-            MESSAGE: 'Transaccion finalizada', 
-            RESULT: result
+            MESSAGE: result, 
         })
     })
     .catch(err => {
@@ -280,10 +278,11 @@ router.put('/nombre', (req, res) => {
 
 router.put('/contenido', (req, res) => {
     const { COD_CARPETA, CONTENIDO } = req.body;
+    console.log(COD_CARPETA)
+    console.log(CONTENIDO)
 
     executor.sp(
-        `SET SERVEROUTPUT ON; 
-        BEGIN 
+        `BEGIN 
             SP_UPDATECONTENTFILE(
                 :codigo, :contenido
             );

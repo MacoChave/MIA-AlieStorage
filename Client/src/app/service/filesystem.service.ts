@@ -67,6 +67,15 @@ export class FilesystemService {
     return this.http.put(`${Uri.CARPETA}/contenido`, data)
   }
 
+  moveContent(cod: number, nombre: string, padre: number) {
+    const data = {
+      COD_CARPETA: cod, 
+      NOMBRE: nombre, 
+      COD_PADRE: padre
+    }
+    return this.http.put(`${Uri.CARPETA}/move`, data);
+  }
+
   deleteFolder(cod: number) {
     return this.http.delete(`${Uri.CARPETA}/${cod}`)
   }
