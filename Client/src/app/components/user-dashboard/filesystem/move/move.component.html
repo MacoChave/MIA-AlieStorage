@@ -1,1 +1,24 @@
-<p>move works!</p>
+<ul class="history">
+    <li class="history__item" *ngFor='let item of history'>
+        <a (click)='returnTo(item)' class="history__link">{{ item.NOMBRE }}</a>
+    </li>
+</ul>
+
+<div class="folder__container" *ngIf='folders != null && folders.length > 0; else emptyContainer'>
+    <div class="folder" *ngFor='let folder of folders'>
+        <div *ngIf='folder.TIPO == 0' class="folder__description" (click)='folderPick(folder)'>
+            <p> {{ folder.NOMBRE }} </p>
+            <p> {{ folder.FECHA_CREACION | date: 'yyyy-MM-dd' }} </p>
+        </div>
+    </div>
+</div>
+<ng-template class="folder-container" #emptyContainer>
+    <div class="folder">
+        <div class="folder__header">
+            <i class="folder__header-icon material-icons">folder_open</i>
+            <p class="folder__header-title">Sin elementos</p>
+        </div>
+    </div>
+</ng-template>
+
+<button mat-button class="btn btn-stroked-primary" (click)='move()'>Mover</button>

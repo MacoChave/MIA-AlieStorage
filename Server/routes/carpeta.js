@@ -309,10 +309,14 @@ router.put('/contenido', (req, res) => {
 
 router.put('/move', (req, res) => {
     const { COD_CARPETA, NOMBRE, COD_PADRE } = req.body;
+    console.log({
+        ACTUAL: COD_CARPETA, 
+        NOMBRE: NOMBRE, 
+        NUEVO_PADRE: COD_PADRE
+    })
 
     executor.sp(
-        `SET SERVEROUTPUT ON;
-        BEGIN
+        `BEGIN
             SP_MOVEFOLDER(:cod_carpeta, :nombre, :cod_padre);
         END`, 
         {

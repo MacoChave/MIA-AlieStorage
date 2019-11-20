@@ -30,7 +30,7 @@ import { MoveComponent } from './components/user-dashboard/filesystem/move/move.
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent, 
     FrontpageComponent,
     SignupComponent, 
     SigninComponent, 

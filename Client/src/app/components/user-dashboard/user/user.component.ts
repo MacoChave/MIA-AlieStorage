@@ -19,6 +19,7 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('session'));
+    if (this.user === null) this.signout();
     if (this.user.EMAIL === null) this.openSnackBar('Completa tus datos de perfil', 'snackbar--invalid');
   }
 

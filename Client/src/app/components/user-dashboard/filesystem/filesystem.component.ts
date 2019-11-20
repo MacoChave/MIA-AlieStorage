@@ -66,7 +66,9 @@ export class FilesystemComponent implements OnInit {
 
   changePart() {
     this.fsService.getRootContent(this.label.PARTICION).subscribe(
-      res => this.folders = <Folder[]>res, 
+      res => {
+        this.folders = <Folder[]>res
+      }, 
       err => console.error(err)
     )
   }
@@ -104,8 +106,8 @@ export class FilesystemComponent implements OnInit {
           FOLDER: folder, 
           CREATE: true
         }, 
-        width: '60vw', 
-        height: '80vh'
+        width: '50vw', 
+        height: '50vh'
       }
     )
   }
@@ -118,8 +120,8 @@ export class FilesystemComponent implements OnInit {
           FOLDER: folder, 
           CREATE: false
         }, 
-        width: '60vw', 
-        height: '80vh'
+        width: '50vw', 
+        height: '50vh'
       }
     )
   }
@@ -129,14 +131,17 @@ export class FilesystemComponent implements OnInit {
 
   move(folder: Folder) {
     console.log('SE DEBERÍA ABRIR LA VENTANA POP UP MOVER');
-    // const dialogRef = this.dialog.open(
-    //   MoveComponent, 
-    //   {
-    //     data: folder, 
-    //     width: '60vw', 
-    //     height: '80vh'
-    //   }
-    // )
+    const dialogRef = this.dialog.open(
+      MoveComponent, 
+      {
+        data: {
+          FOLDER: folder, 
+          HISTORY: this.history
+        }, 
+        width: '60vw', 
+        height: '80vh'
+      }
+    )
   }
 
   delete(folder: Folder) {
@@ -155,5 +160,4 @@ export class FilesystemComponent implements OnInit {
     config.panelClass = ['snackbar', snack_class];
     this._snackBar.open(message, undefined, config);
   }
-
 }
