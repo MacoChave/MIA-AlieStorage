@@ -1,5 +1,5 @@
 export class Uri {
-    static API_URI: string = 'http://192.168.1.11:3000/api';
+    static API_URI: string = 'http://localhost:3000/api';
 
     static INFO         : string = `${Uri.API_URI}/info`;
     static USUARIO      : string = `${Uri.API_URI}/usuario`;
